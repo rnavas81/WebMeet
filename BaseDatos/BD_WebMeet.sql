@@ -82,6 +82,7 @@ CREATE TABLE WebMeet.Usuarios_Amistades (
     id          INT NOT NULL AUTO_INCREMENT,
     usuario1    INT NOT NULL,
     usuario2    INT NOT NULL,
+    aceptada    TINYINT DEFAULT 0,
 
     PRIMARY KEY (id),
     FOREIGN KEY (usuario1) REFERENCES WebMeet.Usuarios(id),
