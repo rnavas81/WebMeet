@@ -52,11 +52,11 @@ INSERT INTO WebMeet.Usuarios_Preferencias
 INSERT INTO WebMeet.Usuarios_Amistades 
     (`usuario1`,`usuario2`)
     VALUES
-    (3,4),
-    (3,5),
-    (4,5),
-    (6,5),
-    (6,4);
+    (3,4,0),
+    (3,5,1),
+    (4,5,1),
+    (6,5,0),
+    (6,4,1);
 INSERT INTO WebMeet.Mensajes 
     (`remitente`,`destinatario`,`titulo`,`mensaje`,`fecha`,`leido`)
     VALUES
