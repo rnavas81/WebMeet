@@ -1,0 +1,173 @@
+/* 
+    Created on : 15 oct. 2020, 10:43:20
+    Author     : rodrigo
+*/
+/* VARIABLES GLOBALES */
+:root {
+    --background-color: rgb(184 199 216);
+    --text-color:   #3f4040;
+    --menu-color:rgb(6, 51, 94);
+    --menu-text-color:rgb(219, 221, 223);
+    --menu-text-color-hover:rgb(251, 253, 255);
+    --menu-logo-border:rgb(0, 162, 255);
+    --menu-logo-background:rgb(126, 177, 223);
+    --menu-icon:whitesmoke;
+    --button-background: #539ac3;
+    --button-color: #2b2b2b;
+    --button-shadow-color: #e8a2cd;
+    --input-border-color :#c3bdbd;
+    --main-color:rgb(6, 51, 94);
+}
+
+/* REJILLA */
+
+.row::after 
+{
+    content: "";
+    clear: both;
+    display: block;
+}
+
+[class*="col-"] 
+{
+    width: 100%;
+}
+
+@media screen and (min-width: 600px) 
+{
+    .col-m-1 {width: 8.33%;}
+    .col-m-2 {width: 16.66%;}
+    .col-m-3 {width: 25%;}
+    .col-m-4 {width: 33.33%;}
+    .col-m-5 {width: 41.66%;}
+    .col-m-6 {width: 50%;}
+    .col-m-7 {width: 58.33%;}
+    .col-m-8 {width: 66.66%;}
+    .col-m-9 {width: 75%;}
+    .col-m-10 {width: 83.33%;}
+    .col-m-11 {width: 91.66%;}
+    .col-m-12 {width: 100%;}
+}
+
+@media  screen and (min-width: 768px) 
+{
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+}
+
+
+/* Los elementos que tienen el atributo class con una clase que en su nombre comienza
+ * por col- les ponemos float left.  
+ * Box-sizing hace que los elementos se midan contando borde y padding ( por defecto
+ * no entran en la medición ). Esto hace que los porcentajes anteriores funcionen
+ * a la perfección.
+ */
+[class*="col-"] {
+    float: left;
+    box-sizing: border-box; 
+    padding: 0.3em;
+}
+
+/** ESTILO GLOBAL **/
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text-color);
+}
+html,body {
+    background: var(--background-color);
+}
+form {
+    display: block;
+    margin: auto;
+}
+form label {
+    display: block;
+}
+
+form input[campo] {
+    border: none;
+    border-radius: 9px;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 10px 2px;
+    outline: none;
+}
+
+input[type="submit"],button {
+    background: var(--button-background);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 7px 1px var(--button-shadow-color);
+    box-sizing: border-box;
+    color: var(--button-color);
+    margin: 1px;
+    min-width: 115px;
+    padding: 15px 25px;
+    width: auto;
+}
+input[type="submit"].rounded,button.rounded {
+    width: 50px;
+    min-width: 0;
+    border-radius: 50%;
+    padding: 15px;
+}
+input[type="submit"]:active {
+    background: var(--button-shadow-color);
+    box-shadow: 3px 3px 5px 0px var(--button-color);
+}
+span.error_msg,span#error_captcha {
+    color: #861a1a;
+}
+input:invalid:focus {
+    border-color: red;
+}
+.captcha {
+    margin: 10px 0;
+}
+
+canvas#captcha {
+    width: 60px;
+    position: relative;
+    top: 16px;
+}
+span.error_msg,span#error_captcha {
+    color: #861a1a;
+}
+
+/**  LOGIN  **/
+main.login form {
+    margin: 10% auto;
+    min-width: fit-content;
+    width: 40%;
+}
+main.login img {
+    position: absolute;
+    right: 100px;
+    top: 250px;
+}
+main.login .botones {
+    margin-top: 20px;
+}
+main.login input#txtInput {
+    width: 60px;
+    height: 40px;
+}
+
+@media screen and (min-width: 1000px) 
+{
+    main.login img {
+        right: 100px;
+        top: 100px;
+    }
+}
