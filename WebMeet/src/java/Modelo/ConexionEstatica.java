@@ -64,7 +64,7 @@ public class ConexionEstatica {
                 Conj_Registros.getInt("id"),
                 Conj_Registros.getInt("activo"),
                 Conj_Registros.getString("email"),
-                Conj_Registros.getString("password"),
+                "",
                 Conj_Registros.getString("nombre")!=null?Conj_Registros.getString("nombre"):"",
                 Conj_Registros.getString("apellidos")!=null?Conj_Registros.getString("apellidos"):"",
                 Conj_Registros.getString("descripcion")!=null?Conj_Registros.getString("descripcion"):"",

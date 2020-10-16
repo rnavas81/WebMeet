@@ -8,6 +8,7 @@ package Auxiliar;
 public class Constantes {
 
     public static final String APP_NAME = "WebMeet";
+    public static final String PREFIX = "WM_";
 
     //BASE DE DATOS
     public static final String DB_NAME = "WebMeet";
@@ -28,7 +29,11 @@ public class Constantes {
     public static final String EMAIL_AUTH = "true";
 
     //VARIABLES DE SESION
-    public static final String S_INDEX_MSG = "index_msg";
+    public static final String S_MSG_INFO = PREFIX+"index_msg";
+    public static final String S_ACCION_FORMULARIO = PREFIX+"formulario_accion";
+    public static final String S_USUARIO_FORMULARIO = PREFIX+"formulario_usuario";
+    
+    
     //DIRECCIONES
     private static final String APP_PATH = "/WebMeet";
     private static final String CSS_PATH = APP_PATH + "/CSS";
@@ -45,9 +50,11 @@ public class Constantes {
     public static final String V_INDEX = APP_PATH + "/index.jsp";
     public static final String V_IDONTKNOW = VISTAS_PATH+"/idontknow.jsp";
     public static final String V_ENTRADA = VISTAS_PATH + "/Entrada.jsp";
+    public static final String V_FORMULARIO_USUARIO = VISTAS_PATH+"/FormularioUsuario.jsp";
 
     //CONTROLADORES
     public static final String C_BASICO = CONTROLADOR_PATH + "/Basico.jsp";
+    public static final String C_ADMIN = CONTROLADOR_PATH+"/Administrador.jsp";
 
     //IMAGENES
     public static final String I_LOGO = RECURSOS_PATH + "/logo.png";
@@ -55,5 +62,9 @@ public class Constantes {
 
     //JS
     public static final String J_FORM = JS_PATH + "/Formularios.js";
+    
+    //ACCIONES
+    public static final String A_CREAR_USUARIO = "nuevoUsuario";
+    public static final String A_EDITAR_USUARIO = "editarUsuario";
 
 }

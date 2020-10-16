@@ -76,6 +76,15 @@
     float: left;
     box-sizing: border-box; 
     padding: 0.3em;
+    min-width: fit-content;
+}
+/** ANIMACIONES **/
+
+
+@keyframes rodarLogo {
+    0%   {left: 10px;}
+    50%  {left: 300px;transform: rotate(360deg);}
+    100% {left: 10px;}
 }
 
 /** ESTILO GLOBAL **/
@@ -86,6 +95,14 @@
 }
 html,body {
     background: var(--background-color);
+}
+main img.logo {
+    position: relative;
+    left: 10px;
+    top: 20px;
+    width: 100px;
+    animation-name: rodarLogo;
+    animation-duration: 2s;
 }
 form {
     display: block;
@@ -126,11 +143,19 @@ input[type="submit"]:active {
     background: var(--button-shadow-color);
     box-shadow: 3px 3px 5px 0px var(--button-color);
 }
+
+label.required:before {
+    content: '*';
+    color: red;
+}
 span.error_msg,span#error_captcha {
     color: #861a1a;
 }
 input:invalid:focus {
     border-color: red;
+}
+main .botones {
+    margin-top: 2em;
 }
 .captcha {
     margin: 10px 0;
@@ -147,17 +172,17 @@ span.error_msg,span#error_captcha {
 
 /**  LOGIN  **/
 main.login form {
+    position: relative;
     margin: 10% auto;
     min-width: fit-content;
     width: 40%;
+    z-index: 10;
 }
 main.login img {
     position: absolute;
     right: 100px;
-    top: 250px;
-}
-main.login .botones {
-    margin-top: 20px;
+    top: 145px;
+    z-index: 1;
 }
 main.login input#txtInput {
     width: 60px;
@@ -170,4 +195,11 @@ main.login input#txtInput {
         right: 100px;
         top: 100px;
     }
+}
+
+/** FORMUARIO USUARIOS **/
+main.formulario.usuario form {
+    margin: 1em auto;
+    width: 70%;
+    
 }

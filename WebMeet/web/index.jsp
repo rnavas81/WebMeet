@@ -19,12 +19,13 @@ Punto de entrada para la aplicación
         <script src="<%=Constantes.J_FORM%>"></script>
     </head>
     <%
-        String msg_index = "";
-        if(session.getAttribute(Constantes.S_INDEX_MSG)!=null){
-            msg_index = (String)session.getAttribute(Constantes.S_INDEX_MSG);
+        String msg_info = "";
+        if(session.getAttribute(Constantes.S_MSG_INFO)!=null){
+            msg_info = (String)session.getAttribute(Constantes.S_MSG_INFO);
+            session.removeAttribute(Constantes.S_MSG_INFO);
         }
         int randNum = (int)(Math.random() * 100);
-        boolean hayCaptcha = randNum>20;
+        boolean hayCaptcha = randNum>60;
         %>
     <body onload="validarFormulario('formulario',<%=hayCaptcha?"txtInput":"false"%>)">
         <header>  
@@ -35,7 +36,7 @@ Punto de entrada para la aplicación
                     <img src="<%=Constantes.I_LOGO%>" alt="alt"/>
                     <form id="formulario" action="<%=Constantes.C_BASICO%>" method="POST" novalidate>
                         <div class="row">
-                            <span class="col-m-12 col-12"><%=msg_index%></span>
+                            <span class="col-m-12 col-12"><%=msg_info%></span>
                         </div>
                         <div class="row">
                             <label class="col-m-3 col-3"><i class="fas fa-user"></i> Email</label>

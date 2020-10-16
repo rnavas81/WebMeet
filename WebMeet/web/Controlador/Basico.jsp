@@ -30,7 +30,6 @@
             accion = "actualizar_tarea";
         } else {
             accion = "";
-            session.invalidate();
             redireccion = Constantes.V_INDEX;
         }
     }
@@ -42,7 +41,7 @@
     boolean[] cargarDatos = {false};
     
     if(accion.equals("Acceder")){
-        
+    } else if(accion.equals("Registrar")){
     } else if(accion.equals("entrada")){
         cargarDatos[0]=true;
     }
@@ -62,12 +61,15 @@
             usuario = new Usuario();
         }
         accion = "entrada";
+    } else if (accion.equals("Registrar")){
+        redireccion = Constantes.V_FORMULARIO_USUARIO;
+        session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_CREAR_USUARIO);
     } else {
         session.invalidate();
         redireccion= Constantes.V_INDEX;
     }
-    /*
     if(accion.equals("entrada")){
+    /*
         switch (usuario.getRol()) {
             case 1://Usuario normal
                 redireccion = Constantes.V_ENTRADA_TECNI;
@@ -80,8 +82,8 @@
                 redireccion = Constantes.V_INDEX;
                 break;
         }        
-    }
     */
+    }
     if(redireccion!=null && !redireccion.isEmpty()){
         response.sendRedirect(redireccion);
     } else {
