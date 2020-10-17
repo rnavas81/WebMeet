@@ -19,7 +19,8 @@ como para editar las existentes
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
-        <script src="<%=Constantes.J_FORM%>"></script>
+        <script src="<%=Constantes.J_FORMULARIOUSUARIO%>"></script>
+        <script src="<%=Constantes.J_OWNCAPTCHA%>"></script>
     </head>
     <%
         String msg_info = "";
@@ -43,14 +44,14 @@ como para editar las existentes
         session.removeAttribute(Constantes.S_USUARIO_FORMULARIO);
         session.removeAttribute(Constantes.S_ACCION_FORMULARIO);
         %>
-    <body onload="validarFormulario('formulario')">
+    <body onload="validarFormulario()">
         <header>  
         </header>
         <main class="formulario usuario">
             <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
             <div class="row">
                 <div class="col-m-12 col-12">
-                    <form id="formulario"  action="<%=controlador%>" method="POST" novalidate>
+                    <form id="formularioUsuario"  action="<%=controlador%>" method="POST" novalidate>
                         <div class="row">
                             <!-- MENSAJE DE ERROR -->
                             <span class="col-m-12 col-12"><%=msg_info%></span>
@@ -59,35 +60,49 @@ como para editar las existentes
                             <!-- CAMPO EMAIL -->
                             <span class="col-m-12 col-12 error_msg email"></span>
                             <div class="col-m-4 col-4">
-                                <i class="fas fa-at"></i><label class="required">Email</label>                                
+                                <i class="fas fa-at"></i>&nbsp<label class="required">Email</label>                                
                             </div>
-                            <label class="col-m-4 col-4 required"><i class="fas fa-at"></i> Email</label>
-                            <input class="col-m-8 col-8" campo="email" type="email" name="email" required maxlength="500"/>
+                            <input class="col-m-8 col-8" campo type="email" name="email" required maxlength="500"/>
                             <!-- CAMPO NOMBRE -->
                             <span class="col-m-12 col-12 error_msg nombre"></span>
-                            <label class="col-m-4 col-4"><i class="fas fa-user"></i> Nombre</label>
-                            <input class="col-m-8 col-8" campo="nombre" type="text" name="nombre" maxlength="500"/>
+                            <div class="col-m-4 col-4">
+                                <i class="fas fa-user"></i>&nbsp<label>Nombre</label>                                
+                            </div>
+                            <input class="col-m-8 col-8" campo type="text" name="nombre" maxlength="500"/>
                             <!-- CAMPO APELLIDOS -->
                             <span class="col-m-12 col-12 error_msg apellidos"></span>
-                            <label class="col-m-4 col-4"><i class="fas fa-address-card"></i> Apellidos</label>
-                            <input class="col-m-8 col-8" campo="apellidos" type="text" name="apellidos" maxlength="500"/>
-                            <!-- CONTRASEÑA  -->
-                            <span class="col-m-12 col-12 error_msg pasword"></span>
-                            <label class="col-m-4 col-4 required"><i class="fas fa-unlock-alt"></i> Contraseña</label>
-                            <input class="col-m-8 col-8" campo="pasword" type="pasword" name="pasword" required maxlength="32"minlength="8"/>
-                            <!-- CONFIRMACIÓn CONTRASELA  -->
-                            <span class="col-m-12 col-12 error_msg confirmacion"></span>
                             <div class="col-m-4 col-4">
-                                <i class="fas fa-unlock-alt"></i><label class="required">Confirmación de contraseña</label>                                
+                                <i class="fas fa-address-card">&nbsp</i><label>Apellidos</label>                                
                             </div>
-                            <input class="col-m-8 col-8" campo="confirmacion" type="pasword" name="confirmacion" required maxlength="32"minlength="8"/>
+                            <input class="col-m-8 col-8" campo type="text" name="apellidos" maxlength="500"/>
+                            <!-- CONTRASEÑA  -->
+                            <span class="col-m-12 col-12 error_msg password"></span>
+                            <div class="col-m-4 col-4">
+                                <i class="fas fa-unlock-alt"></i>&nbsp<label class="required">Contraseña</label>                                
+                            </div>
+                            <input class="col-m-8 col-8" campo type="password" name="password" required
+                                minlength="4" maxlength="32" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,32}$">
+                            <!-- CONFIRMACIÓN CONTRASEÑA  -->
+                            <span class="col-m-12 col-12 error_msg password2"></span>
+                            <div class="col-m-4 col-4">
+                                <i class="fas fa-unlock-alt"></i>&nbsp<label class="required">Confirmación de contraseña</label>                                
+                            </div>
+                            <input class="col-m-8 col-8" campo type="password" name="password2" required
+                                minlength="4" maxlength="32">
+                            <!-- CAPTCHA -->
+                            <div class="col-m12 col-12">
+                                <span id="error_captcha" aria-live="assertive"></span>
+                                <canvas id="captcha"></canvas>  
+                                <input campo type="text" id="captchaInput"/>
+                                <button type="button" class="rounded" onclick="refrescarCaptcha('captcha');"><i class="fas fa-redo-alt"></i></button>
+                            </div>
                         </div>
                         <div class="row botones">
                             <div class="col-m-2 col-2">
                                 <input type="submit" name="<%=accion%>" value="<%=boton_accion%>">
                             </div>
                             <div class="col-m-2 col-2">
-                                <input type="submit" name="<%=accion%>" value="Cancelar">
+                                <input type="submit" value="Cancelar">
                             </div>
                         </div>
                     </form>

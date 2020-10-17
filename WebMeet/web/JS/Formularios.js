@@ -64,6 +64,10 @@ validarFormulario = (idFormulario,ponerCaptcha=false) => {
         });
     }
     form.addEventListener('submit', function (event) {
+        console.log(event);
+        if(event.submitter.name=='accion' && event.submitter.value == 'Registrar' || event.submitter.value){
+            
+        }
         var valido = true;
         for (var elemento in elementos) {
             if (!elementos[elemento].input.validity.valid) {

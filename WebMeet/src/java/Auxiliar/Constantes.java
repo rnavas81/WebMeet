@@ -62,6 +62,9 @@ public class Constantes {
 
     //JS
     public static final String J_FORM = JS_PATH + "/Formularios.js";
+    public static final String J_INDEX = JS_PATH + "/index.js";
+    public static final String J_OWNCAPTCHA = JS_PATH + "/OwnCaptcha.js";
+    public static final String J_FORMULARIOUSUARIO = JS_PATH + "/FormularioUsuario.js";
     
     //ACCIONES
     public static final String A_CREAR_USUARIO = "nuevoUsuario";

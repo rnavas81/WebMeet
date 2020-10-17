@@ -15,7 +15,7 @@
     </head>
     <body>
         <h1>No se lo que tengo que hacer</h1>
-        <form action="<%=Constantes.C_BASICO%>">
+        <form action="<%=Constantes.C_BASICO%>" method="POST">
             <input type="submit" name="accion" value="Salir">
         </form>
     </body>

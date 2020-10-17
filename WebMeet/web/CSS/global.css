@@ -108,9 +108,7 @@ form {
     display: block;
     margin: auto;
 }
-form label {
-    display: block;
-}
+form label {}
 
 form input[campo] {
     border: none;
@@ -160,11 +158,16 @@ main .botones {
 .captcha {
     margin: 10px 0;
 }
-
+span#error_captcha {
+    display: block;
+}
 canvas#captcha {
     width: 60px;
     position: relative;
     top: 16px;
+}
+input#captchaInput {
+    width: 65px;
 }
 span.error_msg,span#error_captcha {
     color: #861a1a;
@@ -174,7 +177,6 @@ span.error_msg,span#error_captcha {
 main.login form {
     position: relative;
     margin: 10% auto;
-    min-width: fit-content;
     width: 40%;
     z-index: 10;
 }
