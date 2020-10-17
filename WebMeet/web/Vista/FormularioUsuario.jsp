@@ -46,9 +46,9 @@ como para editar las existentes
         %>
     <body onload="validarFormulario()">
         <header>  
+            <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
         </header>
         <main class="formulario usuario">
-            <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
             <div class="row">
                 <div class="col-m-12 col-12">
                     <form id="formularioUsuario"  action="<%=controlador%>" method="POST" novalidate>

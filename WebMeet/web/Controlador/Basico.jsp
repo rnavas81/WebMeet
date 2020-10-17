@@ -3,8 +3,10 @@
     Created on : 15 oct. 2020, 13:44:56
     Author     : rodrigo
 --%>
+<%@page import="Auxiliar.Funciones"%>
 <%@page import="Modelo.ConexionEstatica"%>
 <%@page import="Modelo.Usuario"%>
+<%@page import="Modelo.Email"%>
 <%@page import="Auxiliar.Constantes"%>
 <%
     
@@ -20,8 +22,8 @@
     if (accion == null) {
         if (request.getParameter(Constantes.A_CREAR_USUARIO) != null) {
             accion = Constantes.A_CREAR_USUARIO;
-        } else if (request.getParameter("modificarEditarPerfil") != null) {
-            accion = "modificarPerfil";
+        } else if (request.getParameter(Constantes.A_RECUPERAR_USUARIO) != null) {
+            accion = Constantes.A_RECUPERAR_USUARIO;
         } else if(request.getParameter("rechazar_tarea")!=null){
             accion = "rechazar_tarea";
         } else if(request.getParameter("editar_tarea")!=null){
@@ -56,11 +58,11 @@
         usuario = ConexionEstatica.accederUsuario(email, password);
         if (usuario != null) {//Puede acceder
             session.setAttribute("usuario", usuario);
+            accion = "entrada";
         } else {
-            //session.setAttribute(Constantes.S_MSG_INDEX, "DNI o contraseña no valido"); 
-            usuario = new Usuario();
+            session.setAttribute(Constantes.S_MSG_INFO, "DNI o contraseña no valido"); 
+            redireccion = Constantes.V_INDEX;
         }
-        accion = "entrada";
     } else if (accion.equals("Registrar")){
         redireccion = Constantes.V_FORMULARIO_USUARIO;
         session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_CREAR_USUARIO);
@@ -89,6 +91,22 @@
         }
 
 
+    } else if (accion.equals("Recuperar")){
+        redireccion = Constantes.V_RECUPERAR_USUARIO;
+        
+    } else if (accion.equals(Constantes.A_RECUPERAR_USUARIO)){
+        session.setAttribute(Constantes.S_MSG_INFO, "Contrseña modificada.\nConsulte su email para acceder con su nueva contraseña");
+        redireccion = Constantes.V_INDEX;
+        try {
+            String to = request.getParameter("email") != null ? request.getParameter("email") : "";
+            String newPass = Funciones.alphanumericoAleatorio(8);
+            ConexionEstatica.cambiarCampoUsuario("password",Funciones.encriptarTexto(newPass),to);
+            Email email = new Email();
+            String mensaje= "Ha solicitado un cambio de contraseña.\nSu nueva contraseña es " + newPass;
+            String asunto = "Contraseña olvidada";
+            email.enviarCorreo(to, mensaje, asunto);                
+        } catch (Exception e) {
+        }
     } else if(accion.equals("salir")){
     } else {
         session.invalidate();

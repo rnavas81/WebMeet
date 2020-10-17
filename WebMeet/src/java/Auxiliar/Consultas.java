@@ -45,17 +45,19 @@ public class Consultas {
      * @return 
      */
     public static String getUsuarios() {
-        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + " "
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + ", GROUP_CONCAT(r.rol) AS roles "
             + "FROM `" + Constantes.T_USUARIOS + "` p "
+            + "RIGHT JOIN " + Constantes.T_USUARIOS_ROLES + " r ON r.usuario = p.id "
             + "ORDER BY p.apellidos,p.nombre";
     }
     /**
      * Recupera los datos de un usuario
      * @return 
      */
-    public static String getUsuario() {
-        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + " "
+    public static String getUsuarioByEmail() {
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + ", GROUP_CONCAT(r.rol) AS roles "
             + "FROM `" + Constantes.T_USUARIOS + "` p "
+            + "RIGHT JOIN " + Constantes.T_USUARIOS_ROLES + " r ON r.usuario = p.id "
             + "WHERE email = ?";
     }
     /**
@@ -63,9 +65,10 @@ public class Consultas {
      * @return 
      */
     public static String testUsuario() {
-        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + " "
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + ", GROUP_CONCAT(r.rol) AS roles "
             + "FROM `" + Constantes.T_USUARIOS + "` p "
-            + "WHERE p.email = ? AND p.password=?";
+            + "RIGHT JOIN " + Constantes.T_USUARIOS_ROLES + " r ON r.usuario = p.id "
+            + "WHERE p.email = ? AND p.password=? AND activo=1";
     }
     /**
      * Crea una nueva entrada de usuario
@@ -79,6 +82,12 @@ public class Consultas {
         String consulta = "INSERT INTO " + Constantes.T_USUARIOS + " (" + campos + ") VALUES (" + valores + ");";
 
         return consulta;
+    }
+    public static String insertUsuarioRol() {
+        return "INSERT INTO " + Constantes.T_USUARIOS_ROLES + "(usuario,rol) VALUES (?,?);";
+    }
+    public static String deleteUsuarioRolesById(){
+        return "DELETE FROM " + Constantes.T_USUARIOS_ROLES + " WHERE id = ?;";
     }
     /**
      * Actualiza los datos de un usuario
@@ -101,6 +110,9 @@ public class Consultas {
         return consulta;
         */
         return "";
+    }
+    public static String updateUsuarioById(String campo){
+        return "UPDATE " + Constantes.T_USUARIOS + " SET " + campo + " = ? WHERE id = ?";
     }
     /**
      * Actualiza un solo campo del usuario

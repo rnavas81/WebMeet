@@ -72,7 +72,11 @@ public class ConexionEstatica {
                 Conj_Registros.getString("fechaNacimiento")!=null?Conj_Registros.getString("fechaNacimiento"):"",
                 Conj_Registros.getString("pais")!=null?Conj_Registros.getString("pais"):"",
                 Conj_Registros.getString("ciudad")!=null?Conj_Registros.getString("ciudad"):""
-            );            
+            );   
+            String[] roles = Conj_Registros.getString("roles").split(",");
+            for(String rol:roles){
+                p.setRol(Integer.parseInt(rol));
+            }
         } catch (SQLException e) {
             System.err.println("recogerDatosUsuario[Error] "+e.getMessage());
             p=null;
@@ -109,7 +113,7 @@ public class ConexionEstatica {
                 abrirBD();
             }
             //ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_SQL.executeQuery(Consultas.getUsuario(dni));
-            Sentencia_preparada = Conex.prepareStatement(Consultas.getUsuario());
+            Sentencia_preparada = Conex.prepareStatement(Consultas.getUsuarioByEmail());
             Sentencia_preparada.setString(1, email);            
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             if (ConexionEstatica.Conj_Registros.next())//Si devuelve true es que existe.
@@ -272,6 +276,32 @@ public class ConexionEstatica {
         }
 
         return hecho;
+    }
+    public static boolean cambiarCampoUsuario(String campo,String valor,String email){
+        boolean hecho = false;
+        boolean estabaAbierta = true;
+        try {
+            if(Conex==null || Conex.isClosed()){
+                estabaAbierta = false;
+                abrirBD();
+            }
+            Usuario usuario = existeUsuario(email);
+            if (usuario != null) {
+                Sentencia_preparada = Conex.prepareStatement(Consultas.updateUsuarioById(campo));
+                Sentencia_preparada.setString(1, valor);
+                Sentencia_preparada.setInt(2, usuario.getId());
+                hecho = ConexionEstatica.Sentencia_preparada.executeUpdate()>0;
+                //ConexionEstatica.Sentencia_SQL.executeUpdate(Consultas.insertUsuario(persona,password));
+            }
+        } catch (SQLException ex) {
+            System.err.println("agregarUsuario[Error] "+ex.getMessage());
+            hecho = false;
+        } finally {
+            if(!estabaAbierta)cerrarBD();
+        }
+
+        return hecho;
+        
     }
     /**
      * Comprueba si existe una entrada con el mismo dni. Si no existe agrega una

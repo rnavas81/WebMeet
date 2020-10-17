@@ -96,7 +96,7 @@
 html,body {
     background: var(--background-color);
 }
-main img.logo {
+header img.logo {
     position: relative;
     left: 10px;
     top: 20px;
@@ -204,4 +204,10 @@ main.formulario.usuario form {
     margin: 1em auto;
     width: 70%;
     
+}
+
+/** IDONTKNOW **/
+main.idontknow form {
+    margin: 1em auto;
+    width: fit-content;    
 }

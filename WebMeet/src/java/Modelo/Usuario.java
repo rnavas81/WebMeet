@@ -1,5 +1,8 @@
 package Modelo;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -21,13 +24,15 @@ public class Usuario {
     private String fechaNacimiento = "";
     private String pais = "";
     private String ciudad = "";
-
+    private LinkedList<Integer>roles = new LinkedList<>();
     public Usuario() {
+        this.roles.add(1);
     }
     public Usuario (String email,String nombre,String apellidos){
         this.email = email;
         this.nombre = nombre;
         this.apellidos = apellidos;
+        this.roles.add(1);
     }
     public Usuario(int id, int activo, String email, String nombre, String apellidos, String descripcion, int genero, String fechaNacimiento, String pais, String ciudad) {
         this.id = id;
@@ -40,6 +45,7 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.pais = pais;
         this.ciudad = ciudad;
+        this.roles.add(1);
     }
 
     public int getId() {
@@ -117,6 +123,21 @@ public class Usuario {
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-    
+
+    public LinkedList getRoles() {
+        return roles;
+    }
+
+    public void setRoles(LinkedList<Integer> roles) {
+        this.roles = roles;
+    }
+    public void setRol(final int i){
+        if(!this.roles.contains(i)){
+            this.roles.add(i);
+        }
+    }
+    public boolean isRol(final int i){
+        return this.roles.contains(i);
+    }
     
 }
