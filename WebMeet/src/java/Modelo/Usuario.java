@@ -14,7 +14,6 @@ public class Usuario {
     private int id = -1;
     private int activo = 0;
     private String email = "";
-    private String password = "";
     private String nombre = "";
     private String apellidos = "";
     private String descripcion = "";
@@ -25,12 +24,15 @@ public class Usuario {
 
     public Usuario() {
     }
-
-    public Usuario(int id, int activo, String email, String password, String nombre, String apellidos, String descripcion, int genero, String fechaNacimiento, String pais, String ciudad) {
+    public Usuario (String email,String nombre,String apellidos){
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+    }
+    public Usuario(int id, int activo, String email, String nombre, String apellidos, String descripcion, int genero, String fechaNacimiento, String pais, String ciudad) {
         this.id = id;
         this.activo = activo;
         this.email = email;
-        this.password = password;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.descripcion = descripcion;
@@ -58,14 +60,6 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getNombre() {

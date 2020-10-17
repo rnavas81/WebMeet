@@ -2,6 +2,7 @@ package Modelo;
 
 import Auxiliar.Constantes;
 import Auxiliar.Consultas;
+import Auxiliar.Funciones;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,6 +14,7 @@ public class ConexionEstatica {
     private static java.sql.Connection Conex;
     //Atributo a través del cual hacemos la conexión física.
     private static java.sql.Statement Sentencia_SQL;
+    private static java.sql.PreparedStatement Sentencia_preparada;
     //Atributo que nos permite ejecutar una sentencia SQL
     private static java.sql.ResultSet Conj_Registros;
 
@@ -59,12 +61,10 @@ public class ConexionEstatica {
     private static Usuario recogerDatosUsuario() {
         Usuario p;
         try {
-            //String dni, String username, int tipo, String nombre, String apellidos, String email, String avatar, String password
             p = new Usuario(
                 Conj_Registros.getInt("id"),
                 Conj_Registros.getInt("activo"),
                 Conj_Registros.getString("email"),
-                "",
                 Conj_Registros.getString("nombre")!=null?Conj_Registros.getString("nombre"):"",
                 Conj_Registros.getString("apellidos")!=null?Conj_Registros.getString("apellidos"):"",
                 Conj_Registros.getString("descripcion")!=null?Conj_Registros.getString("descripcion"):"",
@@ -100,7 +100,7 @@ public class ConexionEstatica {
         return item;
     }
     */
-    public static Usuario existeUsuario(String dni) {
+    public static Usuario existeUsuario(String email) {
         Usuario existe = null;
         boolean estabaAbierta = true;
         try {
@@ -108,7 +108,10 @@ public class ConexionEstatica {
                 estabaAbierta = false;
                 abrirBD();
             }
-            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_SQL.executeQuery(Consultas.getUsuario(dni));
+            //ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_SQL.executeQuery(Consultas.getUsuario(dni));
+            Sentencia_preparada = Conex.prepareStatement(Consultas.getUsuario());
+            Sentencia_preparada.setString(1, email);            
+            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             if (ConexionEstatica.Conj_Registros.next())//Si devuelve true es que existe.
             {
                 existe = recogerDatosUsuario();
@@ -137,7 +140,11 @@ public class ConexionEstatica {
                 estabaAbierta = false;
                 abrirBD();
             }
-            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_SQL.executeQuery(Consultas.testUsuario(email, password));
+            //ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_SQL.executeQuery(Consultas.testUsuario(email, password));
+            Sentencia_preparada = Conex.prepareStatement(Consultas.testUsuario());
+            Sentencia_preparada.setString(1, email);          
+            Sentencia_preparada.setString(2, Funciones.encriptarTexto(password));          
+            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             if (ConexionEstatica.Conj_Registros.next())//Si devuelve true es que existe.
             {
                 existe = recogerDatosUsuario();
@@ -227,13 +234,14 @@ public class ConexionEstatica {
     }
 
     /**
-     * Comprueba si existe una entrada con el mismo dni. Si no existe agrega una
-     * entrada con la persona
+     * Comprueba si existe una entrada con el mismo dni.Si no existe agrega una
+ entrada con la persona
      *
-     * @param persona
+     * @param usuario
+     * @param password
      * @return
      */
-    public static boolean agregarUsuario(Usuario persona) {
+    public static boolean agregarUsuario(Usuario usuario,String password) {
         boolean hecho = false;
         boolean estabaAbierta = true;
         try {
@@ -241,9 +249,20 @@ public class ConexionEstatica {
                 estabaAbierta = false;
                 abrirBD();
             }
-            if (existeUsuario(persona.getEmail()) == null) {
-                ConexionEstatica.Sentencia_SQL.executeUpdate(Consultas.insertUsuario(persona));
-                hecho = true;
+            if (existeUsuario(usuario.getEmail()) == null) {
+                Sentencia_preparada = Conex.prepareStatement(Consultas.insertUsuario());
+                Sentencia_preparada.setInt(1, usuario.getActivo());
+                Sentencia_preparada.setString(2, usuario.getEmail());
+                Sentencia_preparada.setString(3, Funciones.encriptarTexto(password));
+                Sentencia_preparada.setString(4, usuario.getNombre());
+                Sentencia_preparada.setString(5, usuario.getApellidos());
+                Sentencia_preparada.setString(6, usuario.getDescripcion());
+                Sentencia_preparada.setInt(7, usuario.getGenero());
+                Sentencia_preparada.setString(8, usuario.getFechaNacimiento().isBlank()?null:usuario.getFechaNacimiento());
+                Sentencia_preparada.setString(9, usuario.getPais());
+                Sentencia_preparada.setString(10, usuario.getCiudad());
+                hecho = ConexionEstatica.Sentencia_preparada.executeUpdate()>0;
+                //ConexionEstatica.Sentencia_SQL.executeUpdate(Consultas.insertUsuario(persona,password));
             }
         } catch (SQLException ex) {
             System.err.println("agregarUsuario[Error] "+ex.getMessage());

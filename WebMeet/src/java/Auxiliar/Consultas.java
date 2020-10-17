@@ -6,6 +6,7 @@
 package Auxiliar;
 
 //import Modelo.Tarea;
+import Modelo.ConexionEstatica;
 import Modelo.Usuario;
 
 
@@ -50,33 +51,30 @@ public class Consultas {
     }
     /**
      * Recupera los datos de un usuario
-     * @param dni
      * @return 
      */
-    public static String getUsuario(String email) {
+    public static String getUsuario() {
         return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + " "
             + "FROM `" + Constantes.T_USUARIOS + "` p "
-            + "WHERE email = '" + email + "'";
+            + "WHERE email = ?";
     }
     /**
      * Comprueba un usuario por dni && password
-     * @param email
-     * @param password
      * @return 
      */
-    public static String testUsuario(String email, String password) {
+    public static String testUsuario() {
         return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + " "
             + "FROM `" + Constantes.T_USUARIOS + "` p "
-            + "WHERE p.email = '" + email + "' AND p.password='" + password + "'";
+            + "WHERE p.email = ? AND p.password=?";
     }
     /**
      * Crea una nueva entrada de usuario
      * @param usuario
      * @return 
      */
-    public static String insertUsuario(Usuario usuario) {
+    public static String insertUsuario() {
         String campos = "`activo`,`email`,`password`,`nombre`,`apellidos`,`descripcion`,`genero`,`fechaNacimiento`,`pais`,`ciudad`";
-        String valores = "'" + usuario.getActivo()+ "','" + usuario.getEmail()+ "','" + usuario.getPassword() + "','" + usuario.getNombre()+ "','" + usuario.getApellidos()+ "','" + usuario.getDescripcion()+ "','" + usuario.getGenero()+ "'"+ "','" + usuario.getFechaNacimiento()+ "'"+ "','" + usuario.getPais()+ "'"+ "','" + usuario.getCiudad()+ "'";
+        String valores = "?,?,?,?,?,?,?,?,?,?";
 
         String consulta = "INSERT INTO " + Constantes.T_USUARIOS + " (" + campos + ") VALUES (" + valores + ");";
 
