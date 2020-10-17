@@ -14,9 +14,18 @@
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
     </head>
     <body>
-        <h1>No se lo que tengo que hacer</h1>
-        <form action="<%=Constantes.C_BASICO%>" method="POST">
-            <input type="submit" name="accion" value="Salir">
-        </form>
+        <header>  
+            <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
+        </header>
+        <main class="idontknow">
+            <div class="row">
+                <h1 class="col-m-12 col-12" style="text-align: center;">Lo siento pero no se lo que tengo que hacer</h1>                
+                <div class="col-m-12 col-12">
+                    <form action="<%=Constantes.C_BASICO%>" method="POST">
+                        <input type="submit" name="accion" value="Salir">
+                    </form>
+                </div>
+            </div>                    
+        </main>
     </body>
 </html>

@@ -17,6 +17,7 @@ public class Constantes {
 
     //TABLAS
     public static final String T_USUARIOS = "Usuarios";
+    public static final String T_USUARIOS_ROLES = "Usuarios_Roles";
     public static final String T_AUXILIAR = "Auxiliar";
     public static final String T_TAREAS = "Tareas";
     public static final String T_TAREAS_HISTORICO = "Tareas_Historico";
@@ -51,6 +52,7 @@ public class Constantes {
     public static final String V_IDONTKNOW = VISTAS_PATH+"/idontknow.jsp";
     public static final String V_ENTRADA = VISTAS_PATH + "/Entrada.jsp";
     public static final String V_FORMULARIO_USUARIO = VISTAS_PATH+"/FormularioUsuario.jsp";
+    public static final String V_RECUPERAR_USUARIO = VISTAS_PATH+"/RecuperarUsuario.jsp";
 
     //CONTROLADORES
     public static final String C_BASICO = CONTROLADOR_PATH + "/Basico.jsp";
@@ -69,5 +71,7 @@ public class Constantes {
     //ACCIONES
     public static final String A_CREAR_USUARIO = "nuevoUsuario";
     public static final String A_EDITAR_USUARIO = "editarUsuario";
+    public static final String A_RECUPERAR_USUARIO = "recuperarUsuario";
+    
 
 }
