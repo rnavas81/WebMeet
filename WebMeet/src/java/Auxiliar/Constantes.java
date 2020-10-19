@@ -16,11 +16,13 @@ public class Constantes {
     public static final String DB_PASS = "Chubaca2020";
 
     //TABLAS
+    public static final String T_AUXILIAR = "Auxiliar";
     public static final String T_USUARIOS = "Usuarios";
     public static final String T_USUARIOS_ROLES = "Usuarios_Roles";
-    public static final String T_AUXILIAR = "Auxiliar";
-    public static final String T_TAREAS = "Tareas";
-    public static final String T_TAREAS_HISTORICO = "Tareas_Historico";
+    public static final String T_USUARIOS_PREFERENCIAS = "Usuarios_Preferencias";
+    public static final String T_USUARIOS_AMISTADES = "Usuarios_Amistades";
+    public static final String T_MENSAJES = "Mensajes";
+    public static final String T_MENSAJES_ADJUNTOS = "Mensajes_Adjuntos";
 
     //MAIL
     public static final String EMAIL_ADDRESS = "auxiliardaw2@gmail.com";
@@ -38,6 +40,7 @@ public class Constantes {
     public static final String S_ROLES = PREFIX + "roles";
     public static final String S_GENEROS = PREFIX + "generos";
     public static final String S_ACCION = PREFIX + "accion";
+    public static final String S_PREFERENCIAS = PREFIX + "preferencias";
 
     //DIRECCIONES
     private static final String APP_PATH = "/WebMeet";
@@ -74,6 +77,7 @@ public class Constantes {
     public static final String J_INDEX = JS_PATH + "/index.js";
     public static final String J_OWNCAPTCHA = JS_PATH + "/OwnCaptcha.js";
     public static final String J_FORMULARIOUSUARIO = JS_PATH + "/FormularioUsuario.js";
+    public static final String J_FORMULARIOPREFERENCIAS = JS_PATH + "/FormularioPreferencias.js";
 
     //ACCIONES
     public static final String A_CREAR_USUARIO = "nuevoUsuario";
@@ -93,6 +97,8 @@ public class Constantes {
     public static final String A_MODIFICAR = "Modificar";
     public static final String A_AGREGAR = "Agregar";
     public static final String A_ENTRAR_USUARIO = "entrarUsuario";
+    public static final String A_AGREGAR_PREFERENCIAS = "preferenciasUsuario";
+    
     //VALORES
     public static final String M_USUARIOS = "users";
     public static final String M_ADMINISTRADORES = "admin";
