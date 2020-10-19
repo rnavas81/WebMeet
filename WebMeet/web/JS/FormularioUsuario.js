@@ -30,6 +30,18 @@ const mensajes = {
         tooShort:'Como mínimo 4 caracteres',
         tooLong:'Como máximo 32 caracteres',
         match:'La contraseña y la confimación no coinciden'
+    },
+    descripcion:{
+        tooLong:'Como máximo 500 caracteres'
+    },
+    fechaNacimiento:{
+        
+    },
+    pais:{
+        tooLong:'Como máximo 500 caracteres'
+    },
+    ciudad:{
+        tooLong:'Como máximo 500 caracteres'
     }
 };
 
@@ -38,24 +50,25 @@ validarFormulario = () => {
     let elementos = {};
     refrescarCaptcha('captcha');
     for(name in mensajes){
-        elementos[name] = {
-            input: document.getElementsByName(name)[0],
-            error: document.getElementsByClassName(`error_msg ${name}`)[0]
-        };
-        console.log(elementos[name]);
-        elementos[name].input.addEventListener('input', function (event) {
-            // Cada vez que el usuario escribe algo, verificamos si
-            // los campos del formulario son válidos.
+        if(document.getElementsByName(name).length>0) {
+            elementos[name] = {
+                input: document.getElementsByName(name)[0],
+                error: document.getElementsByClassName(`error_msg ${name}`)[0]
+            };
+            elementos[name].input.addEventListener('input:blur', function (event) {
+                // Cada vez que el usuario escribe algo, verificamos si
+                // los campos del formulario son válidos.
 
-            if (elementos[name].input.validity.valid) {
-                // En caso de que haya un mensaje de error visible, si el campo
-                // es válido, eliminamos el mensaje de error.
-                elementos[name].error.innerHTML = ''; // Restablece el contenido del mensaje
-            } else {
-                // Si todavía hay un error, muestra el error exacto
-                showError(name);
-            }
-        });
+                if (elementos[name].input.validity.valid) {
+                    // En caso de que haya un mensaje de error visible, si el campo
+                    // es válido, eliminamos el mensaje de error.
+                    elementos[name].error.innerHTML = ''; // Restablece el contenido del mensaje
+                } else {
+                    // Si todavía hay un error, muestra el error exacto
+                    showError(name);
+                }
+            });            
+        }
     }
     form.addEventListener('submit', function (event) {
         if(event.submitter.value === 'Cancelar'){

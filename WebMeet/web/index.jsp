@@ -12,7 +12,7 @@ Punto de entrada para la aplicación
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title><%=Constantes .APP_NAME%></title>
+        <title><%=Constantes.APP_NAME%></title>
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
@@ -21,6 +21,9 @@ Punto de entrada para la aplicación
 
     </head>
     <%
+        if(session.getAttribute(Constantes.S_USUARIO)!=null){
+            response.sendRedirect(Constantes.C_BASICO+"?accion=entrada");
+        }
         String msg_info = "";
         if(session.getAttribute(Constantes.S_MSG_INFO)!=null){
             msg_info = (String)session.getAttribute(Constantes.S_MSG_INFO);

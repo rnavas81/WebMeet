@@ -30,11 +30,15 @@ public class Constantes {
     public static final String EMAIL_AUTH = "true";
 
     //VARIABLES DE SESION
-    public static final String S_MSG_INFO = PREFIX+"index_msg";
-    public static final String S_ACCION_FORMULARIO = PREFIX+"formulario_accion";
-    public static final String S_USUARIO_FORMULARIO = PREFIX+"formulario_usuario";
-    
-    
+    public static final String S_MSG_INFO = PREFIX + "index_msg";
+    public static final String S_USUARIO = PREFIX + "usuario";
+    public static final String S_ACCION_FORMULARIO = PREFIX + "formulario_accion";
+    public static final String S_USUARIO_FORMULARIO = PREFIX + "formulario_usuario";
+    public static final String S_DATOS_TABLA = PREFIX + "datos_tabla";
+    public static final String S_ROLES = PREFIX + "roles";
+    public static final String S_GENEROS = PREFIX + "generos";
+    public static final String S_ACCION = PREFIX + "accion";
+
     //DIRECCIONES
     private static final String APP_PATH = "/WebMeet";
     private static final String CSS_PATH = APP_PATH + "/CSS";
@@ -49,14 +53,17 @@ public class Constantes {
 
     //VISTAS
     public static final String V_INDEX = APP_PATH + "/index.jsp";
-    public static final String V_IDONTKNOW = VISTAS_PATH+"/idontknow.jsp";
+    public static final String V_IDONTKNOW = VISTAS_PATH + "/idontknow.jsp";
     public static final String V_ENTRADA = VISTAS_PATH + "/Entrada.jsp";
-    public static final String V_FORMULARIO_USUARIO = VISTAS_PATH+"/FormularioUsuario.jsp";
-    public static final String V_RECUPERAR_USUARIO = VISTAS_PATH+"/RecuperarUsuario.jsp";
+    public static final String V_FORMULARIO_USUARIO = VISTAS_PATH + "/FormularioUsuario.jsp";
+    public static final String V_RECUPERAR_USUARIO = VISTAS_PATH + "/RecuperarUsuario.jsp";
+    public static final String V_TABLA_CRUD = VISTAS_PATH + "/tablaCRUD.jsp";
+    public static final String V_ENTRADA_USER = VISTAS_PATH + "/entradaUsuario.jsp";
+    public static final String V_FORMULARIO_PREFERENCIAS = VISTAS_PATH + "/FormularioPreferencias.jsp";
 
     //CONTROLADORES
     public static final String C_BASICO = CONTROLADOR_PATH + "/Basico.jsp";
-    public static final String C_ADMIN = CONTROLADOR_PATH+"/Administrador.jsp";
+    public static final String C_ADMIN = CONTROLADOR_PATH + "/Administrador.jsp";
 
     //IMAGENES
     public static final String I_LOGO = RECURSOS_PATH + "/logo.png";
@@ -67,11 +74,30 @@ public class Constantes {
     public static final String J_INDEX = JS_PATH + "/index.js";
     public static final String J_OWNCAPTCHA = JS_PATH + "/OwnCaptcha.js";
     public static final String J_FORMULARIOUSUARIO = JS_PATH + "/FormularioUsuario.js";
-    
+
     //ACCIONES
     public static final String A_CREAR_USUARIO = "nuevoUsuario";
+    public static final String A_AGREGAR_USUARIO = "agregarUsuario";
     public static final String A_EDITAR_USUARIO = "editarUsuario";
+    public static final String A_EDITAR_MI_USUARIO = "editarMiUsuario";
     public static final String A_RECUPERAR_USUARIO = "recuperarUsuario";
+    public static final String A_TABLA_USUARIOS = "tablaUsuarios";
+    public static final String A_TABLA_ADMINISTRADORES = "tablaAdministradores";
+    public static final String A_PANEL = "panelUsuario";
+    public static final String A_SALIR = "salir";
+    public static final String A_CRUD_ACTIVAR = "usuarioActivar";
+    public static final String A_CRUD_ELIMINAR = "usuarioEliminar";
+    public static final String A_CRUD_EDITAR = "usuarioEditar";
+    public static final String A_CRUD_AGREGAR = "crudAgregar";
+    public static final String A_CANCELAR = "Cancelar";
+    public static final String A_MODIFICAR = "Modificar";
+    public static final String A_AGREGAR = "Agregar";
+    public static final String A_ENTRAR_USUARIO = "entrarUsuario";
+    //VALORES
+    public static final String M_USUARIOS = "users";
+    public static final String M_ADMINISTRADORES = "admin";
     
+    public static final int ROL_USER = 1;
+    public static final int ROL_ADMIN = 2;
 
 }

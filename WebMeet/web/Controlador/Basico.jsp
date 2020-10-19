@@ -18,18 +18,12 @@
     // Recupera la acción 
     String accion = request.getParameter("accion");
     
-    Usuario usuario;
+    Usuario usuario = new Usuario();
     if (accion == null) {
         if (request.getParameter(Constantes.A_CREAR_USUARIO) != null) {
             accion = Constantes.A_CREAR_USUARIO;
         } else if (request.getParameter(Constantes.A_RECUPERAR_USUARIO) != null) {
             accion = Constantes.A_RECUPERAR_USUARIO;
-        } else if(request.getParameter("rechazar_tarea")!=null){
-            accion = "rechazar_tarea";
-        } else if(request.getParameter("editar_tarea")!=null){
-            accion = "editar_tarea";
-        } else if(request.getParameter("actualizar_tarea")!=null){
-            accion = "actualizar_tarea";
         } else {
             accion = "";
             redireccion = Constantes.V_INDEX;
@@ -57,12 +51,14 @@
         String password = request.getParameter("password") != null ? request.getParameter("password") : "";
         usuario = ConexionEstatica.accederUsuario(email, password);
         if (usuario != null) {//Puede acceder
-            session.setAttribute("usuario", usuario);
+            session.setAttribute(Constantes.S_USUARIO, usuario);
             accion = "entrada";
         } else {
-            session.setAttribute(Constantes.S_MSG_INFO, "DNI o contraseña no valido"); 
+            session.setAttribute(Constantes.S_MSG_INFO, "Usuario o contraseña no valido"); 
             redireccion = Constantes.V_INDEX;
         }
+    } else if (accion.equals("entrada")){
+        usuario = (Usuario)session.getAttribute(Constantes.S_USUARIO);
     } else if (accion.equals("Registrar")){
         redireccion = Constantes.V_FORMULARIO_USUARIO;
         session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_CREAR_USUARIO);
@@ -73,6 +69,7 @@
         String password = request.getParameter("password") != null ? request.getParameter("password") : "";
         String password2 = request.getParameter("password2") != null ? request.getParameter("password2") : "";
         Usuario nuevo = new Usuario(email,nombre,apellidos);
+        nuevo.setRol(Constantes.ROL_USER);
         if(password.equals(password2)){
             if(ConexionEstatica.agregarUsuario(nuevo,password)){
                 session.setAttribute(Constantes.S_MSG_INFO, "Usuario creado");
@@ -89,11 +86,8 @@
             session.setAttribute(Constantes.S_USUARIO_FORMULARIO,nuevo);
             redireccion = Constantes.V_FORMULARIO_USUARIO;            
         }
-
-
     } else if (accion.equals("Recuperar")){
-        redireccion = Constantes.V_RECUPERAR_USUARIO;
-        
+        redireccion = Constantes.V_RECUPERAR_USUARIO;        
     } else if (accion.equals(Constantes.A_RECUPERAR_USUARIO)){
         session.setAttribute(Constantes.S_MSG_INFO, "Contrseña modificada.\nConsulte su email para acceder con su nueva contraseña");
         redireccion = Constantes.V_INDEX;
@@ -113,20 +107,15 @@
         redireccion= Constantes.V_INDEX;
     }
     if(accion.equals("entrada")){
-    /*
-        switch (usuario.getRol()) {
-            case 1://Usuario normal
-                redireccion = Constantes.V_ENTRADA_TECNI;
-                break;
-            case 2://Usuario administrador
-                redireccion = Constantes.V_ENTRADA_ADMIN;
-                break;
-            default:
-                //session.invalidate();
-                redireccion = Constantes.V_INDEX;
-                break;
-        }        
-    */
+        if(usuario.isRol(2)){
+            redireccion = Constantes.V_TABLA_CRUD;
+            session.setAttribute(Constantes.S_DATOS_TABLA, Constantes.M_USUARIOS);
+        } else if(usuario.isRol(1)){
+            redireccion = Constantes.V_ENTRADA_USER;
+            session.setAttribute(Constantes.S_DATOS_TABLA, Constantes.M_ADMINISTRADORES);
+        } else {
+            redireccion = Constantes.V_INDEX;
+        }
     }
     if(redireccion!=null && !redireccion.isEmpty()){
         response.sendRedirect(redireccion);
