@@ -155,7 +155,6 @@ public class ConexionEstatica {
             Sentencia_preparada = Conex.prepareStatement(Consultas.testUsuario());
             Sentencia_preparada.setString(1, email);
             Sentencia_preparada.setString(2, Funciones.encriptarTexto(password));
-            System.out.println(Sentencia_preparada);
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             if (ConexionEstatica.Conj_Registros.next())//Si devuelve true es que existe.
             {
@@ -187,7 +186,6 @@ public class ConexionEstatica {
             }
             Sentencia_preparada = Conex.prepareStatement(Consultas.getUsuariosByRol());
             Sentencia_preparada.setInt(1, rol);
-            System.out.println(Sentencia_preparada);
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             Usuario element;
             while (Conj_Registros.next()) {
@@ -425,7 +423,7 @@ public class ConexionEstatica {
             if(password.isBlank()){
                 Sentencia_preparada.setInt(10, usuario.getId());
             } else {
-                Sentencia_preparada.setString(10, password);
+                Sentencia_preparada.setString(10, Funciones.encriptarTexto(password));
                 Sentencia_preparada.setInt(11, usuario.getId());            
             }
             hecho = ConexionEstatica.Sentencia_preparada.executeUpdate()>0;
@@ -453,6 +451,52 @@ public class ConexionEstatica {
         }
 
         return hecho;
+    }
+    ///PREFERENCIAS
+    public static boolean tienePreferencias(Usuario usuario){
+        boolean tiene;
+        boolean estabaAbierta = true;
+        try {
+            if(Conex==null || Conex.isClosed()){
+                estabaAbierta = false;
+                abrirBD();
+            }
+            Sentencia_preparada = Conex.prepareStatement(Consultas.getPreferenciasById());
+            Sentencia_preparada.setInt(1, usuario.getId());
+            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
+            tiene = Conj_Registros.next();
+        } catch (SQLException ex) {
+            System.err.println("getAuxiliar[Error] "+ex.getMessage());
+            tiene = false;
+        } finally {
+            if(!estabaAbierta)cerrarBD();
+        }
+        return tiene;
+        
+    }
+    public static boolean agregarPreferenciaUsuario(Usuario usuario,int idPreferencia,int valor){
+        boolean hecho;
+        boolean estabaAbierta = true;
+        try {
+            if(Conex==null || Conex.isClosed()){
+                estabaAbierta = false;
+                abrirBD();
+            }
+            Sentencia_preparada = Conex.prepareStatement(Consultas.insertPreferencia());
+            Sentencia_preparada.setInt(1, usuario.getId());
+            Sentencia_preparada.setInt(2, idPreferencia);
+            Sentencia_preparada.setInt(3, valor);
+            Sentencia_preparada.setInt(4, valor);
+            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
+            hecho = Conj_Registros.next();
+        } catch (SQLException ex) {
+            System.err.println("getAuxiliar[Error] "+ex.getMessage());
+            hecho = false;
+        } finally {
+            if(!estabaAbierta)cerrarBD();
+        }
+        return hecho;
+        
     }
     ///AUXILIAR
     private static LinkedList<Auxiliar> getAuxiliar(int tipo) {

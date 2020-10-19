@@ -20,6 +20,7 @@ public class Consultas {
     ///////////////////////////////
     private static final String[] CAMPOS_AUXILIAR = {"id", "nombre", "descripcion"};
     private static final String[] CAMPOS_USUARIO = {"id", "activo", "email", "nombre", "apellidos", "descripcion", "genero", "fechaNacimiento", "pais", "ciudad"};
+    private static final String[] CAMPOS_PREFERENCIAS = {"id","usuario","preferencia","valor"};
     //private static final String[] CAMPOS_TAREAS = {"id", "descripcion","usuario","horasPrev","horasEmpl","nivelDiff","finalizado"};
     //private static final String[] CAMPOS_TAREAS_HISTORICO = {"idTarea","usuario","fechaInicio","fechaFin","horasEmpl"};
 
@@ -178,7 +179,16 @@ public class Consultas {
     //         AUXILIAR          //
     ///////////////////////////////
     public static String getAuxiliar() {
-        return "SELECT " + String.join(",", CAMPOS_AUXILIAR) + " FROM " + Constantes.T_AUXILIAR + " WHERE tipo= ? ;";
+        return "SELECT " + String.join(",", CAMPOS_AUXILIAR) + " FROM " + Constantes.T_AUXILIAR + " WHERE tipo= ? ORDER BY nombre;";
+    }
+
+    public static String getPreferenciasById() {
+        return "SELECT "+String.join(",",CAMPOS_PREFERENCIAS)+" FROM "+Constantes.T_USUARIOS_PREFERENCIAS+" WHERE usuario = ?;";
+    }
+
+    public static String insertPreferencia() {
+        return "INSERT INTO "+Constantes.T_USUARIOS_PREFERENCIAS+" (usuario,preferencia,valor) VALUES (?,?,?)"
+                + "ON DUPLICATE KEY UPDATE valor=?";
     }
 
     ///////////////////////////////

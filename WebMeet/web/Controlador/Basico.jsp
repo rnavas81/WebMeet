@@ -3,10 +3,12 @@
     Created on : 15 oct. 2020, 13:44:56
     Author     : rodrigo
 --%>
+<%@page import="java.util.LinkedList"%>
 <%@page import="Auxiliar.Funciones"%>
 <%@page import="Modelo.ConexionEstatica"%>
 <%@page import="Modelo.Usuario"%>
 <%@page import="Modelo.Email"%>
+<%@page import="Modelo.Auxiliar"%>
 <%@page import="Auxiliar.Constantes"%>
 <%
     
@@ -17,31 +19,52 @@
     String redireccion = null;
     // Recupera la acción 
     String accion = request.getParameter("accion");
-    
+    /**
+     * @var cargarDatos Determina si se deben recuperar/cargar datos
+     * 0=> Usuario 1=>Preferencias
+     */
+    boolean[] cargarDatos = {false,false};
     Usuario usuario = new Usuario();
+    LinkedList<Auxiliar> preferencias = new LinkedList<>();
+    
     if (accion == null) {
         if (request.getParameter(Constantes.A_CREAR_USUARIO) != null) {
             accion = Constantes.A_CREAR_USUARIO;
         } else if (request.getParameter(Constantes.A_RECUPERAR_USUARIO) != null) {
             accion = Constantes.A_RECUPERAR_USUARIO;
+        } else if(request.getParameter(Constantes.A_AGREGAR_PREFERENCIAS)!=null){
+            accion = Constantes.A_AGREGAR_PREFERENCIAS;
+        } else if(session.getAttribute(Constantes.S_ACCION)!=null){
+            accion =(String) session.getAttribute(Constantes.S_ACCION);
         } else {
             accion = "";
             redireccion = Constantes.V_INDEX;
         }
     }
     
-    /**
-     * @var cargarDatos Determina si se deben recuperar/cargar datos
-     * 0=> Usuario
-     */
-    boolean[] cargarDatos = {false};
     
     if(accion.equals("Acceder")){
     } else if(accion.equals("Registrar")){
+    } else if(accion.equals(Constantes.A_AGREGAR_PREFERENCIAS)){
+        cargarDatos[0]=true;
+        cargarDatos[1]=true;
+    } else if(accion.equals(Constantes.A_ENTRAR_USUARIO)){
+        cargarDatos[0]=true;
     } else if(accion.equals("entrada")){
         cargarDatos[0]=true;
     }
 
+    if(cargarDatos[0]){
+        usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
+    }
+    if(cargarDatos[1]){
+        if(session.getAttribute(Constantes.S_PREFERENCIAS)!=null){
+            preferencias = (LinkedList<Auxiliar>)session.getAttribute(Constantes.S_PREFERENCIAS);
+        } else {
+            preferencias = ConexionEstatica.getPreferencias();
+            session.setAttribute(Constantes.S_PREFERENCIAS, preferencias);
+        }
+    }
 
     System.out.println(accion);
     //**************************
@@ -101,18 +124,34 @@
             email.enviarCorreo(to, mensaje, asunto);                
         } catch (Exception e) {
         }
-    } else if(accion.equals("salir")){
+    } else if(accion.equals(Constantes.A_ENTRAR_USUARIO)){
+        if(ConexionEstatica.tienePreferencias(usuario)){
+            redireccion = Constantes.V_ENTRADA_USER;            
+        } else {
+            redireccion = Constantes.V_FORMULARIO_PREFERENCIAS;            
+        }
+    } else if(accion.equals(Constantes.A_AGREGAR_PREFERENCIAS)){
+        for(Auxiliar preferencia:preferencias){
+            int idPreferencia = preferencia.getId();
+            int valor = Integer.parseInt(request.getParameter(String.valueOf(idPreferencia)));
+            ConexionEstatica.agregarPreferenciaUsuario(usuario,idPreferencia,valor);
+        }
+        redireccion = Constantes.V_ENTRADA_USER;
+    } else if(accion.equals(Constantes.A_SALIR)){
     } else {
         session.invalidate();
         redireccion= Constantes.V_INDEX;
     }
     if(accion.equals("entrada")){
-        if(usuario.isRol(2)){
+        if(usuario.isRol(Constantes.ROL_ADMIN)){
             redireccion = Constantes.V_TABLA_CRUD;
             session.setAttribute(Constantes.S_DATOS_TABLA, Constantes.M_USUARIOS);
-        } else if(usuario.isRol(1)){
-            redireccion = Constantes.V_ENTRADA_USER;
-            session.setAttribute(Constantes.S_DATOS_TABLA, Constantes.M_ADMINISTRADORES);
+        } else if(usuario.isRol(Constantes.ROL_USER)){
+            if(ConexionEstatica.tienePreferencias(usuario)){
+                redireccion = Constantes.V_ENTRADA_USER;            
+            } else {
+                redireccion = Constantes.V_FORMULARIO_PREFERENCIAS;            
+            }
         } else {
             redireccion = Constantes.V_INDEX;
         }
