@@ -9,24 +9,23 @@ package Auxiliar;
 import Modelo.ConexionEstatica;
 import Modelo.Usuario;
 
-
 /**
  *
  * @author rodrigo
  */
 public class Consultas {
 
-      ///////////////////////////////
-     //         USUARIOS          //
     ///////////////////////////////
-    private static final String[] CAMPOS_AUXILIAR = {"id", "nombre","descipcion"};
-    private static final String[] CAMPOS_USUARIO = {"id","activo","email","password","nombre","apellidos","descripcion","genero","fechaNacimiento","pais","ciudad"};
+    //         USUARIOS          //
+    ///////////////////////////////
+    private static final String[] CAMPOS_AUXILIAR = {"id", "nombre", "descripcion"};
+    private static final String[] CAMPOS_USUARIO = {"id", "activo", "email", "nombre", "apellidos", "descripcion", "genero", "fechaNacimiento", "pais", "ciudad"};
     //private static final String[] CAMPOS_TAREAS = {"id", "descripcion","usuario","horasPrev","horasEmpl","nivelDiff","finalizado"};
     //private static final String[] CAMPOS_TAREAS_HISTORICO = {"idTarea","usuario","fechaInicio","fechaFin","horasEmpl"};
 
     private static String getCampos(String[] campos, String pref) {
         String response = "";
-        if(!pref.isBlank()){
+        if (!pref.isBlank()) {
             boolean primero = true;
             for (String campo : campos) {
                 if (!primero) {
@@ -34,46 +33,75 @@ public class Consultas {
                 }
                 response += pref + "." + campo;
                 primero = false;
-            }            
+            }
         } else {
             response = String.join(",", campos);
         }
         return response;
     }
+
     /**
      * Recupera los datos de todos los usuarios
-     * @return 
+     *
+     * @return
      */
     public static String getUsuarios() {
-        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + ", GROUP_CONCAT(r.rol) AS roles "
-            + "FROM `" + Constantes.T_USUARIOS + "` p "
-            + "RIGHT JOIN " + Constantes.T_USUARIOS_ROLES + " r ON r.usuario = p.id "
-            + "ORDER BY p.apellidos,p.nombre";
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p")
+        + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=p.id) AS roles "
+        + "FROM " + Constantes.T_USUARIOS + " p " 
+        + "ORDER BY p.apellidos,p.nombre";
     }
+
+    /**
+     * Recupera los datos de todos los usuarios
+     *
+     * @return
+     */
+    public static String getUsuariosByRol() {
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p")
+        + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=p.id) AS roles "
+        + "FROM " + Constantes.T_USUARIOS + " p " 
+        + "WHERE p.id IN (SELECT usuario FROM "+Constantes.T_USUARIOS_ROLES+" WHERE rol=?) "
+        + "ORDER BY p.apellidos,p.nombre";
+    }
+    public static String getUsuariosById() {
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p")
+        + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=p.id) AS roles "
+        + "FROM " + Constantes.T_USUARIOS + " p " 
+        + "WHERE p.id = ? "
+        + "ORDER BY p.apellidos,p.nombre";
+    }
+
     /**
      * Recupera los datos de un usuario
-     * @return 
+     *
+     * @return
      */
     public static String getUsuarioByEmail() {
-        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + ", GROUP_CONCAT(r.rol) AS roles "
-            + "FROM `" + Constantes.T_USUARIOS + "` p "
-            + "RIGHT JOIN " + Constantes.T_USUARIOS_ROLES + " r ON r.usuario = p.id "
-            + "WHERE email = ?";
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p")
+        + ",(SELECT GROUP_CONCAT(r.rol) FROM " + Constantes.T_USUARIOS_ROLES + " r WHERE r.usuario=p.id) AS roles "
+        + "FROM `" + Constantes.T_USUARIOS + "` p "
+        + "WHERE email = ? "
+        + "ORDER BY p.apellidos,p.nombre";
     }
+
     /**
      * Comprueba un usuario por dni && password
-     * @return 
+     *
+     * @return
      */
     public static String testUsuario() {
-        return "SELECT " + getCampos(CAMPOS_USUARIO, "p") + ", GROUP_CONCAT(r.rol) AS roles "
-            + "FROM `" + Constantes.T_USUARIOS + "` p "
-            + "RIGHT JOIN " + Constantes.T_USUARIOS_ROLES + " r ON r.usuario = p.id "
-            + "WHERE p.email = ? AND p.password=? AND activo=1";
+        return "SELECT " + getCampos(CAMPOS_USUARIO, "p")
+        + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=p.id) AS roles "
+        + "FROM " + Constantes.T_USUARIOS + " p "
+        + "WHERE p.email = ? AND p.password=? AND activo=1";
     }
+
     /**
      * Crea una nueva entrada de usuario
+     *
      * @param usuario
-     * @return 
+     * @return
      */
     public static String insertUsuario() {
         String campos = "`activo`,`email`,`password`,`nombre`,`apellidos`,`descripcion`,`genero`,`fechaNacimiento`,`pais`,`ciudad`";
@@ -83,67 +111,78 @@ public class Consultas {
 
         return consulta;
     }
+
+    /**
+     * Inserta un nuevo rol para el usuario (int usuario,int rol)
+     *
+     * @return
+     */
     public static String insertUsuarioRol() {
         return "INSERT INTO " + Constantes.T_USUARIOS_ROLES + "(usuario,rol) VALUES (?,?);";
     }
-    public static String deleteUsuarioRolesById(){
-        return "DELETE FROM " + Constantes.T_USUARIOS_ROLES + " WHERE id = ?;";
+
+    public static String deleteUsuarioRolesById() {
+        return "DELETE FROM " + Constantes.T_USUARIOS_ROLES + " WHERE usuario = ?;";
     }
+
     /**
      * Actualiza los datos de un usuario
+     *
      * @param usuario
-     * @return 
+     * @return
      */
-    public static String updateUsuario(Usuario usuario) {
-        /*
-        String consulta = "UPDATE " + Constantes.T_USUARIOS + " SET "
-            + "`username` = '" + usuario.getUsername()+ "'"
-            + ",`tipo` = '" + usuario.getTipo()+ "'"
-            + ",`nombre` = '" + usuario.getNombre()+ "'"
-            + ",`apellidos` = '" + usuario.getApellidos()+ "'"
-            + ",`email` = '" + usuario.getEmail()+ "'"
-            + ",`avatar` = '" + usuario.getAvatar()+ "'";
-        if (!usuario.getPassword().isBlank()) {
-            consulta += ",`password` = '" + usuario.getPassword() + "'";
+    public static String updateUsuario(boolean password) {
+        String consulta = "UPDATE " + Constantes.T_USUARIOS + " SET ";
+        boolean primero = true;
+        for(String campo:CAMPOS_USUARIO){
+            if(campo!="id"){
+                if(!primero)consulta+=",";
+                else primero=false;
+                consulta+="`"+campo+"`=?";                
+            }
         }
-        consulta += " WHERE dni='" + usuario.getDni() + "'";
+        if (password) {
+            consulta += ",`password` = ?";
+        }
+        consulta += " WHERE id = ?";
         return consulta;
-        */
-        return "";
     }
-    public static String updateUsuarioById(String campo){
+
+    public static String updateUsuarioById(String campo) {
         return "UPDATE " + Constantes.T_USUARIOS + " SET " + campo + " = ? WHERE id = ?";
     }
+
     /**
      * Actualiza un solo campo del usuario
+     *
      * @param dni
      * @param Campo
      * @param Valor
-     * @return 
+     * @return
      */
     public static String updateUsuarioField(String dni, String Campo, String Valor) {
         return "UPDATE " + Constantes.T_USUARIOS + " SET `" + Campo + "` = '" + Valor + "' WHERE dni = '" + dni + "'";
     }
+
     /**
      * Elimina el usuario de la base de datos
+     *
      * @param dni
-     * @return 
+     * @return
      */
     public static String deleteUsuario(String dni) {
         return "DELETE FROM " + Constantes.T_USUARIOS + " WHERE dni='" + dni + "'";
     }
-    
-    
-      ///////////////////////////////
-     //         AUXILIAR          //
+
     ///////////////////////////////
-    
-    public static String getAuxiliar(int tipo){
-        return "SELECT "+String.join(",",CAMPOS_AUXILIAR)+" FROM "+Constantes.T_AUXILIAR+" WHERE tipo="+tipo+";";
+    //         AUXILIAR          //
+    ///////////////////////////////
+    public static String getAuxiliar() {
+        return "SELECT " + String.join(",", CAMPOS_AUXILIAR) + " FROM " + Constantes.T_AUXILIAR + " WHERE tipo= ? ;";
     }
-    
-      ///////////////////////////////
-     //          TAREAS           //
+
+    ///////////////////////////////
+    //          TAREAS           //
     ///////////////////////////////
     /*
     public static String getTareas() {
@@ -155,11 +194,12 @@ public class Consultas {
     public static String getTarea(int id) {
         return "SELECT "+String.join(",",CAMPOS_TAREAS)+" FROM "+Constantes.T_TAREAS+" WHERE id='"+id+"';";
     }
-    */
+     */
     /**
      * Crea una nueva entrada de tarea
+     *
      * @param tarea
-     * @return 
+     * @return
      */
     /*
     public static String insertTarea(Tarea tarea) {
@@ -170,11 +210,12 @@ public class Consultas {
 
         return consulta;
     }
-    */
+     */
     /**
      * Actualiza los datos de un tarea
+     *
      * @param tarea
-     * @return 
+     * @return
      */
     /*
     public static String updateTarea(Tarea tarea) {
@@ -188,15 +229,16 @@ public class Consultas {
         consulta += " WHERE id='" + tarea.getId()+ "'";
         return consulta;
     }
-    */
+     */
     /**
      * Elimina una tarea
+     *
      * @param id
-     * @return 
+     * @return
      */
     /*
     public static String deleteTarea(int id) {
         return "DELETE FROM " + Constantes.T_TAREAS + " WHERE id='" + id + "'";
     }
-    */
+     */
 }

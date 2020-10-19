@@ -3,13 +3,15 @@
  * @author Rodrigo Navas
  * @created 2020/10/14
  */
- 
+/*
+El password para admin1@email.com y a@email.com es 123a
+*/
 INSERT INTO WebMeet.Usuarios 
     (`activo`,`email`,`password`,`nombre`,`apellidos`)
     VALUES
-    (1,'admin1@email.com','','admin1','surname1'),
+    (1,'admin1@email.com','1552c03e78d38d5005d4ce7b8018addf','admin1','surname1'),
     (1,'admin2@email.com','','admin2','surname2'),
-    (1,'a@email.com','','user1','surname1'),
+    (1,'a@email.com','1552c03e78d38d5005d4ce7b8018addf','user1','surname1'),
     (1,'b@email.com','','user2','surname2'),
     (1,'c@email.com','','user3','surname3'),
     (1,'d@email.com','','user4','surname4');
@@ -50,7 +52,7 @@ INSERT INTO WebMeet.Usuarios_Preferencias
     (6,7,1),
     (6,8,2);
 INSERT INTO WebMeet.Usuarios_Amistades 
-    (`usuario1`,`usuario2`)
+    (`usuario1`,`usuario2`,`aceptada`)
     VALUES
     (3,4,0),
     (3,5,1),

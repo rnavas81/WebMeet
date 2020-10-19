@@ -6,7 +6,7 @@
 :root {
     --background-color: rgb(184 199 216);
     --text-color:   #3f4040;
-    --menu-color:rgb(6, 51, 94);
+    --menu-color: rgb(210 231 255);
     --menu-text-color:rgb(219, 221, 223);
     --menu-text-color-hover:rgb(251, 253, 255);
     --menu-logo-border:rgb(0, 162, 255);
@@ -17,6 +17,12 @@
     --button-shadow-color: #e8a2cd;
     --input-border-color :#c3bdbd;
     --main-color:rgb(6, 51, 94);
+    --fila-odd: whitesmoke;
+    --fila-even: cornsilk;
+    --tabla-cabecera: #617388;
+    --tabla-cabecera-text: #b8c7d8;
+    --fila-even-text: #282f38;
+    --fila-odd-text: #282f38;
 }
 
 /* REJILLA */
@@ -69,12 +75,12 @@
 /* Los elementos que tienen el atributo class con una clase que en su nombre comienza
  * por col- les ponemos float left.  
  * Box-sizing hace que los elementos se midan contando borde y padding ( por defecto
- * no entran en la medición ). Esto hace que los porcentajes anteriores funcionen
- * a la perfección.
+ * no entran en la mediciÃ³n ). Esto hace que los porcentajes anteriores funcionen
+ * a la perfecciÃ³n.
  */
 [class*="col-"] {
     float: left;
-    box-sizing: border-box; 
+    box-sizing: border-box;
     padding: 0.3em;
     min-width: fit-content;
 }
@@ -99,8 +105,8 @@ html,body {
 header img.logo {
     position: relative;
     left: 10px;
-    top: 20px;
-    width: 100px;
+    top: 0px;
+    width: 60px;
     animation-name: rodarLogo;
     animation-duration: 2s;
 }
@@ -110,32 +116,41 @@ form {
 }
 form label {}
 
-form input[campo] {
+form input[campo],form select[campo] {
     border: none;
     border-radius: 9px;
     box-sizing: border-box;
     display: inline-block;
-    padding: 10px 2px;
+    padding: 10px 10px;
     outline: none;
+    background: whitesmoke;
 }
 
 input[type="submit"],button {
     background: var(--button-background);
     border: none;
     border-radius: 10px;
-    box-shadow: 2px 2px 7px 1px var(--button-shadow-color);
+    /*box-shadow: 2px 2px 7px 1px var(--button-shadow-color);*/
     box-sizing: border-box;
     color: var(--button-color);
     margin: 1px;
     min-width: 115px;
     padding: 15px 25px;
     width: auto;
+    cursor: pointer;
 }
+
 input[type="submit"].rounded,button.rounded {
     width: 50px;
     min-width: 0;
     border-radius: 50%;
     padding: 15px;
+    color: var(--button-color);
+    cursor: pointer;
+}
+button.rounded.mini {
+    padding: 10px;
+    width: auto;
 }
 input[type="submit"]:active {
     background: var(--button-shadow-color);
@@ -172,6 +187,76 @@ input#captchaInput {
 span.error_msg,span#error_captcha {
     color: #861a1a;
 }
+main >div > nav {
+    background: var(--menu-color);
+}
+
+nav ul li {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+nav ul {
+    padding: 0;
+    margin: 9px 0;
+}
+
+nav ul li:hover {
+    font-weight: bold;
+}
+nav ul li:nth-child(4),nav ul li:nth-child(5) {
+    float: right;
+    margin: 0;
+    width: auto;
+}
+.cabecera div,.fila div {
+    color: inherit;
+}
+.right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.fila button {
+    float: right;
+}
+.toolbar {
+    background: var(--menu-color);
+    color: var(--menu-text-color);
+}
+.toolbar>div {
+    padding: 0;
+}
+div.right > * {
+    /* float: right; */
+    justify-content: flex-end;
+}
+div.left > * {
+    float: left;
+}
+.toolbar button,.toolbar input {
+    border-radius: unset;
+    background: transparent;
+    box-shadow: unset;
+    width: auto;
+    padding: 5px;
+    margin: 5px;
+}
+.toolbar input:focus,.toolbar button:focus {
+    outline: unset;
+}
+
+.toolbar input:hover,.toolbar button:hover {
+    font-weight: bold;
+}
+
+/** IDONTKNOW **/
+main.idontknow form {
+    margin: 1em auto;
+    width: fit-content;    
+}
 
 /**  LOGIN  **/
 main.login form {
@@ -203,11 +288,24 @@ main.login input#txtInput {
 main.formulario.usuario form {
     margin: 1em auto;
     width: 70%;
-    
-}
 
-/** IDONTKNOW **/
-main.idontknow form {
-    margin: 1em auto;
-    width: fit-content;    
+}
+/** TABLA DATOS **/
+.cabecera {
+    background: var(--tabla-cabecera);
+    color: var(--tabla-cabecera-text);
+}
+.fila {
+    border-bottom: 1px solid;
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+}
+.fila:nth-child(odd) {
+    background: var(--fila-odd);
+    color: var(--fila-odd-text);
+}
+.fila:nth-child(even) {
+    background: var(--fila-even);
+    color: var(--fila-even-text);
 }

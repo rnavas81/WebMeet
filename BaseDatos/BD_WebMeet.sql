@@ -63,8 +63,8 @@ CREATE TABLE WebMeet.Usuarios_Roles (
     rol         INT NOT NULL,
 
     PRIMARY KEY (usuario,rol),
-    FOREIGN KEY (usuario) REFERENCES WebMeet.Usuarios(id),
-    FOREIGN KEY (rol) REFERENCES WebMeet.Auxiliar(id)
+    FOREIGN KEY (usuario) REFERENCES WebMeet.Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (rol) REFERENCES WebMeet.Auxiliar(id) ON DELETE CASCADE
 );
 
 CREATE TABLE WebMeet.Usuarios_Preferencias (
@@ -74,8 +74,8 @@ CREATE TABLE WebMeet.Usuarios_Preferencias (
     valor       VARCHAR (500) CHARACTER SET utf8 COLLATE utf8_spanish_ci,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (usuario) REFERENCES WebMeet.Usuarios(id),
-    FOREIGN KEY (preferencia) REFERENCES WebMeet.Auxiliar(id)
+    FOREIGN KEY (usuario) REFERENCES WebMeet.Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (preferencia) REFERENCES WebMeet.Auxiliar(id) ON DELETE CASCADE
 );
 
 CREATE TABLE WebMeet.Usuarios_Amistades (
@@ -85,8 +85,8 @@ CREATE TABLE WebMeet.Usuarios_Amistades (
     aceptada    TINYINT DEFAULT 0,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (usuario1) REFERENCES WebMeet.Usuarios(id),
-    FOREIGN KEY (usuario2) REFERENCES WebMeet.Usuarios(id)
+    FOREIGN KEY (usuario1) REFERENCES WebMeet.Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario2) REFERENCES WebMeet.Usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE WebMeet.Mensajes (
@@ -99,8 +99,8 @@ CREATE TABLE WebMeet.Mensajes (
     leido       TINYINT DEFAULT 0,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (remitente) REFERENCES WebMeet.Usuarios(id),
-    FOREIGN KEY (destinatario) REFERENCES WebMeet.Usuarios(id)
+    FOREIGN KEY (remitente) REFERENCES WebMeet.Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (destinatario) REFERENCES WebMeet.Usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE WebMeet.Mensajes_Adjuntos (
@@ -110,5 +110,5 @@ CREATE TABLE WebMeet.Mensajes_Adjuntos (
 
 
     PRIMARY KEY (id),
-    FOREIGN KEY (mensaje) REFERENCES WebMeet.Mensajes(id)
+    FOREIGN KEY (mensaje) REFERENCES WebMeet.Mensajes(id) ON DELETE CASCADE
 )

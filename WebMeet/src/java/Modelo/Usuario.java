@@ -1,6 +1,5 @@
 package Modelo;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /*
@@ -26,13 +25,11 @@ public class Usuario {
     private String ciudad = "";
     private LinkedList<Integer>roles = new LinkedList<>();
     public Usuario() {
-        this.roles.add(1);
     }
     public Usuario (String email,String nombre,String apellidos){
         this.email = email;
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.roles.add(1);
     }
     public Usuario(int id, int activo, String email, String nombre, String apellidos, String descripcion, int genero, String fechaNacimiento, String pais, String ciudad) {
         this.id = id;
@@ -45,13 +42,17 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.pais = pais;
         this.ciudad = ciudad;
-        this.roles.add(1);
     }
 
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+        
+    
     public int getActivo() {
         return activo;
     }
@@ -124,7 +125,7 @@ public class Usuario {
         this.ciudad = ciudad;
     }
 
-    public LinkedList getRoles() {
+    public LinkedList<Integer> getRoles() {
         return roles;
     }
 
