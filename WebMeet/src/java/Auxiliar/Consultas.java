@@ -21,7 +21,7 @@ public class Consultas {
     private static final String[] CAMPOS_AUXILIAR = {"id", "nombre", "descripcion"};
     private static final String[] CAMPOS_USUARIO = {"id", "activo", "email", "nombre", "apellidos", "descripcion", "genero", "fechaNacimiento", "pais", "ciudad"};
     private static final String[] CAMPOS_PREFERENCIAS = {"id","usuario","preferencia","valor"};
-    //private static final String[] CAMPOS_TAREAS = {"id", "descripcion","usuario","horasPrev","horasEmpl","nivelDiff","finalizado"};
+    private static final String[] CAMPOS_MENSAJE= {"id","remitente","destinatario","titulo","mensaje","fecha","leido"};
     //private static final String[] CAMPOS_TAREAS_HISTORICO = {"idTarea","usuario","fechaInicio","fechaFin","horasEmpl"};
 
     private static String getCampos(String[] campos, String pref) {
@@ -191,64 +191,53 @@ public class Consultas {
                 + "ON DUPLICATE KEY UPDATE valor=?";
     }
 
-    ///////////////////////////////
-    //          TAREAS           //
-    ///////////////////////////////
-    /*
-    public static String getTareas() {
-        return "SELECT "+String.join(",",CAMPOS_TAREAS)+" FROM "+Constantes.T_TAREAS+";";
+    public static String getAmigosById() {
+        return "SELECT " +getCampos(CAMPOS_USUARIO, "u")
+                + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=u.id) AS roles "
+                + "FROM "+Constantes.T_USUARIOS_AMISTADES+" a " 
+                + "LEFT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=IF(a.usuario1= ? ,a.usuario2,a.usuario1) "
+                + "WHERE a.usuario1= ? || a.usuario2= ?";
     }
-    public static String getTareas(Usuario u) {
-        return "SELECT "+String.join(",",CAMPOS_TAREAS)+" FROM "+Constantes.T_TAREAS+" WHERE email = '"+u.getEmail()+"';";
+    public static String getNoAmigosById() {
+        return "SELECT " +getCampos(CAMPOS_USUARIO, "u")
+                + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=u.id) AS roles "
+                + "FROM "+Constantes.T_USUARIOS_AMISTADES+" a " 
+                + "LEFT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=IF(a.usuario1= ? ,a.usuario2,a.usuario1) "
+                + "WHERE a.usuario1!= ? && a.usuario2!= ?";
     }
-    public static String getTarea(int id) {
-        return "SELECT "+String.join(",",CAMPOS_TAREAS)+" FROM "+Constantes.T_TAREAS+" WHERE id='"+id+"';";
-    }
-     */
-    /**
-     * Crea una nueva entrada de tarea
-     *
-     * @param tarea
-     * @return
-     */
-    /*
-    public static String insertTarea(Tarea tarea) {
-        String campos = "`id`, `descripcion`,`usuario`,`horasPrev`,`horasEmpl`,`nivelDiff`,`finalizado`";
-        String valores = "'" + tarea.getId()+ "','" + tarea.getDescripcion()+ "','" + tarea.getUsuario()+ "','" + tarea.getHorasPrev()+ "','" + tarea.getHorasEmpl()+ "','" + tarea.getNivelDiff()+ "','" + tarea.getFinalizado()+ "'";
 
-        String consulta = "INSERT INTO " + Constantes.T_TAREAS + " (" + campos + ") VALUES (" + valores + ");";
+    public static String getUsuarioMensajesRecibidos() {
+        return "SELECT "+getCampos(CAMPOS_MENSAJE,"m")+", CONCAT(u.nombre,' ',u.apellidos) AS remitenteNombre "
+                + "FROM "+Constantes.T_MENSAJES+" m "
+                + "LEFT JOIN "+Constantes.T_USUARIOS+" u ON u.id=m.remitente "
+                + "WHERE m.destinatario=? ORDER BY fecha DESC;";
+    }
+    public static String getUsuarioMensajesEnviados() {
+        return "SELECT "+getCampos(CAMPOS_MENSAJE,"m")+", CONCAT(u.nombre,' ',u.apellidos) AS destinatarioNombre "
+                + "FROM "+Constantes.T_MENSAJES+" m "
+                + "LEFT JOIN "+Constantes.T_USUARIOS+" u ON u.id=m.destinatario "
+                + "WHERE m.remitente=? ORDER BY fecha DESC;";
+    }
+    public static String getMensajeById(){
+        return "SELECT "+getCampos(CAMPOS_MENSAJE, "m")+ " "
+                + "FROM "+Constantes.T_MENSAJES+" m "
+                + "WHERE m.id = ?";
+    }
 
-        return consulta;
+    public static String insertMensaje() {
+        return "INSERT INTO " + Constantes.T_MENSAJES 
+                + "(remitente,destinatario,titulo,mensaje) VALUES (?,?,?,?);";
     }
-     */
-    /**
-     * Actualiza los datos de un tarea
-     *
-     * @param tarea
-     * @return
-     */
-    /*
-    public static String updateTarea(Tarea tarea) {
-        String consulta = "UPDATE " + Constantes.T_TAREAS + " SET "
-            + "`descripcion` = '" + tarea.getDescripcion()+ "'"
-            + ",`usuario` = '" + tarea.getUsuario()+ "'"
-            + ",`horasPrev` = '" + tarea.getHorasPrev()+ "'"
-            + ",`horasEmpl` = '" + tarea.getHorasEmpl()+ "'"
-            + ",`nivelDiff` = '" + tarea.getNivelDiff()+ "'"
-            + ",`finalizado` = '" + tarea.getFinalizado()+ "'";
-        consulta += " WHERE id='" + tarea.getId()+ "'";
-        return consulta;
+
+    public static String leerMensaje() {
+        return "UPDATE "+Constantes.T_MENSAJES+" SET leido=1 WHERE id=?";
     }
-     */
-    /**
-     * Elimina una tarea
-     *
-     * @param id
-     * @return
-     */
-    /*
-    public static String deleteTarea(int id) {
-        return "DELETE FROM " + Constantes.T_TAREAS + " WHERE id='" + id + "'";
+
+    public static String borrarMensaje() {
+        return "DELETE FROM "+Constantes.T_MENSAJES+" WHERE id=?";
     }
-     */
+
+    public static String deleteAmistad() {
+        return "DELETE FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE (usuario1=? AND usuario2=?) OR (usuario1=? AND usuario2=?);";
+    }
 }

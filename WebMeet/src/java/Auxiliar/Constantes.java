@@ -8,7 +8,8 @@ package Auxiliar;
 public class Constantes {
 
     public static final String APP_NAME = "WebMeet";
-    public static final String PREFIX = "WM_";
+    public static final String PREFIX_APP = "WM_A_";
+    public static final String PREFIX_SESSION = "WM_S_";
 
     //BASE DE DATOS
     public static final String DB_NAME = "WebMeet";
@@ -31,16 +32,23 @@ public class Constantes {
     public static final int EMAIL_PORT = 587;
     public static final String EMAIL_AUTH = "true";
 
+    //VARIABLES DE APLICACION
+    public static final String AP_USUARIOS = PREFIX_APP + "usuarios";
+
     //VARIABLES DE SESION
-    public static final String S_MSG_INFO = PREFIX + "index_msg";
-    public static final String S_USUARIO = PREFIX + "usuario";
-    public static final String S_ACCION_FORMULARIO = PREFIX + "formulario_accion";
-    public static final String S_USUARIO_FORMULARIO = PREFIX + "formulario_usuario";
-    public static final String S_DATOS_TABLA = PREFIX + "datos_tabla";
-    public static final String S_ROLES = PREFIX + "roles";
-    public static final String S_GENEROS = PREFIX + "generos";
-    public static final String S_ACCION = PREFIX + "accion";
-    public static final String S_PREFERENCIAS = PREFIX + "preferencias";
+    public static final String S_MSG_INFO = PREFIX_SESSION + "index_msg";
+    public static final String S_USUARIO = PREFIX_SESSION + "usuario";
+    public static final String S_AMIGOS = PREFIX_SESSION + "amigos";
+    public static final String S_ACCION_FORMULARIO = PREFIX_SESSION + "formulario_accion";
+    public static final String S_USUARIO_FORMULARIO = PREFIX_SESSION + "formulario_usuario";
+    public static final String S_DATOS_TABLA = PREFIX_SESSION + "datos_tabla";
+    public static final String S_ROLES = PREFIX_SESSION + "roles";
+    public static final String S_GENEROS = PREFIX_SESSION + "generos";
+    public static final String S_ACCION = PREFIX_SESSION + "accion";
+    public static final String S_PREFERENCIAS = PREFIX_SESSION + "preferencias";
+    public static final String S_ACCION_MENSAJE = PREFIX_SESSION + "mensaje";
+    public static final String S_MENSAJE_ID = PREFIX_SESSION + "mensajeID";
+    public static final String S_MENSAJE_DESTINO = PREFIX_SESSION + "mensajeDestino";
 
     //DIRECCIONES
     private static final String APP_PATH = "/WebMeet";
@@ -49,6 +57,7 @@ public class Constantes {
     private static final String JS_PATH = APP_PATH + "/JS";
     private static final String RECURSOS_PATH = APP_PATH + "/Recursos";
     private static final String VISTAS_PATH = APP_PATH + "/Vista";
+    private static final String ROOT_FILES = "/home/rodrigo/particionLinux/DWEBS/Desafio1/WebMeet/WebMeet/web";
 
     //CSS
     public static final String CSS_GLOBAL = CSS_PATH + "/global.css";
@@ -63,10 +72,12 @@ public class Constantes {
     public static final String V_TABLA_CRUD = VISTAS_PATH + "/tablaCRUD.jsp";
     public static final String V_ENTRADA_USER = VISTAS_PATH + "/entradaUsuario.jsp";
     public static final String V_FORMULARIO_PREFERENCIAS = VISTAS_PATH + "/FormularioPreferencias.jsp";
+    public static final String V_MENSAJE = VISTAS_PATH + "/Mensaje.jsp";
 
     //CONTROLADORES
     public static final String C_BASICO = CONTROLADOR_PATH + "/Basico.jsp";
     public static final String C_ADMIN = CONTROLADOR_PATH + "/Administrador.jsp";
+    public static final String C_MENSAJES = CONTROLADOR_PATH + "/controladorMensaje.jsp";
 
     //IMAGENES
     public static final String I_LOGO = RECURSOS_PATH + "/logo.png";
@@ -78,6 +89,8 @@ public class Constantes {
     public static final String J_OWNCAPTCHA = JS_PATH + "/OwnCaptcha.js";
     public static final String J_FORMULARIOUSUARIO = JS_PATH + "/FormularioUsuario.js";
     public static final String J_FORMULARIOPREFERENCIAS = JS_PATH + "/FormularioPreferencias.js";
+    public static final String J_ENTRADAUSUARIO = JS_PATH + "/EntradaUsuario.js";
+    public static final String J_MENSAJE = JS_PATH + "/Mensaje.js";
 
     //ACCIONES
     public static final String A_CREAR_USUARIO = "nuevoUsuario";
@@ -98,11 +111,23 @@ public class Constantes {
     public static final String A_AGREGAR = "Agregar";
     public static final String A_ENTRAR_USUARIO = "entrarUsuario";
     public static final String A_AGREGAR_PREFERENCIAS = "preferenciasUsuario";
-    
+    public static final String A_ENVIAR_MENSAJE = "enviarMensaje";
+    public static final String A_DEJAR_AMIGO = "dejarAmigo";
+    public static final String A_MENSAJE_ENVIAR = "mensajeEnviar";
+    public static final String A_MENSAJE_CANCELAR = "mensajeCancelar";
+    public static final String A_MENSAJE_LEER = "mensajeLeer";
+    public static final String A_MENSAJE_BORRAR = "mensajeBorrar";
+    public static final String A_LEER_MENSAJE = "leerMensaje";
+    public static final String A_ESCRIBIR_MENSAJE = "escribirMensaje";
+
+    //ARCHIVOS SUBIDOS
+    public static final String SUBIDOS_DIR = ROOT_FILES + "/Subidos";
+    public static final String SUBIDOS_PATH = APP_PATH + "/Subidos";
+
     //VALORES
     public static final String M_USUARIOS = "users";
     public static final String M_ADMINISTRADORES = "admin";
-    
+
     public static final int ROL_USER = 1;
     public static final int ROL_ADMIN = 2;
 
