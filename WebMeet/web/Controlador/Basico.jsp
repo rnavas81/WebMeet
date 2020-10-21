@@ -34,8 +34,23 @@
             accion = Constantes.A_RECUPERAR_USUARIO;
         } else if(request.getParameter(Constantes.A_AGREGAR_PREFERENCIAS)!=null){
             accion = Constantes.A_AGREGAR_PREFERENCIAS;
+        } else if(request.getParameter(Constantes.A_ENVIAR_MENSAJE)!=null){
+            accion = Constantes.A_ENVIAR_MENSAJE;
+        } else if(request.getParameter(Constantes.A_DEJAR_AMIGO)!=null){
+            accion =(String) session.getAttribute(Constantes.A_DEJAR_AMIGO);          
+        }else if (request.getParameter(Constantes.A_EDITAR_MI_USUARIO) != null) {
+            accion = Constantes.A_EDITAR_MI_USUARIO;
+        }else if (request.getParameter(Constantes.A_MENSAJE_ENVIAR) != null) {
+            accion = Constantes.A_MENSAJE_ENVIAR;
+        }else if (request.getParameter(Constantes.A_MENSAJE_CANCELAR) != null) {
+            accion = Constantes.A_MENSAJE_CANCELAR;
+        }else if (request.getParameter(Constantes.A_MENSAJE_LEER) != null) {
+            accion = Constantes.A_MENSAJE_LEER;
+        }else if (request.getParameter(Constantes.A_MENSAJE_BORRAR) != null) {
+            accion = Constantes.A_MENSAJE_BORRAR;
         } else if(session.getAttribute(Constantes.S_ACCION)!=null){
             accion =(String) session.getAttribute(Constantes.S_ACCION);
+            session.removeAttribute(Constantes.S_ACCION);
         } else {
             accion = "";
             redireccion = Constantes.V_INDEX;
@@ -44,17 +59,24 @@
     
     
     if(accion.equals("Acceder")){
-    } else if(accion.equals("Registrar")){
+    } else if(accion.equals(Constantes.A_SALIR) || accion.equals(Constantes.A_DEJAR_AMIGO)){
+        cargarDatos[0]=true;
     } else if(accion.equals(Constantes.A_AGREGAR_PREFERENCIAS)){
         cargarDatos[0]=true;
         cargarDatos[1]=true;
     } else if(accion.equals(Constantes.A_ENTRAR_USUARIO)){
         cargarDatos[0]=true;
+    } else if(accion.equals("conectados")){
+        cargarDatos[0]=true;
     } else if(accion.equals("entrada")){
         cargarDatos[0]=true;
     }
 
-    if(cargarDatos[0]){
+    if(cargarDatos[0]){        
+        if(session.getAttribute(Constantes.S_USUARIO)==null){
+            session.setAttribute(Constantes.S_ACCION, Constantes.A_SALIR);
+            response.sendRedirect(Constantes.C_BASICO);
+        }
         usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
     }
     if(cargarDatos[1]){
@@ -66,7 +88,6 @@
         }
     }
 
-    System.out.println(accion);
     //**************************
     //ACCIONES
     if (accion.equals("Acceder")) {
@@ -75,12 +96,27 @@
         usuario = ConexionEstatica.accederUsuario(email, password);
         if (usuario != null) {//Puede acceder
             session.setAttribute(Constantes.S_USUARIO, usuario);
+            LinkedList<Usuario> usuariosConectados = new LinkedList<>();
+            if(application.getAttribute(Constantes.AP_USUARIOS)!=null){
+                usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
+            }
+            boolean encontrado = false;
+            for (int i = 0; !encontrado && i < usuariosConectados.size(); i++) {
+                    Usuario get = usuariosConectados.get(i);
+                    encontrado=get.getId()==usuario.getId();
+                }
+            if(!encontrado)usuariosConectados.add(usuario);
+            application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);
             accion = "entrada";
         } else {
             session.setAttribute(Constantes.S_MSG_INFO, "Usuario o contraseña no valido"); 
             redireccion = Constantes.V_INDEX;
         }
     } else if (accion.equals("entrada")){
+        if(session.getAttribute(Constantes.S_USUARIO)==null){
+            session.setAttribute(Constantes.S_ACCION, Constantes.A_SALIR);
+            response.sendRedirect(Constantes.C_BASICO);
+        }
         usuario = (Usuario)session.getAttribute(Constantes.S_USUARIO);
     } else if (accion.equals("Registrar")){
         redireccion = Constantes.V_FORMULARIO_USUARIO;
@@ -137,8 +173,78 @@
             ConexionEstatica.agregarPreferenciaUsuario(usuario,idPreferencia,valor);
         }
         redireccion = Constantes.V_ENTRADA_USER;
+    } else if(accion.equals(Constantes.A_EDITAR_MI_USUARIO)){
+        session.setAttribute(Constantes.S_USUARIO_FORMULARIO,usuario);
+        session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_EDITAR_USUARIO);
+        redireccion=Constantes.V_FORMULARIO_USUARIO;                
+    } else if(accion.equals(Constantes.A_ENVIAR_MENSAJE)){
+        if(request.getParameter("id")!=null){
+            session.setAttribute(Constantes.S_MENSAJE_DESTINO, request.getParameter("id"));
+        }
+        session.setAttribute(Constantes.S_ACCION_MENSAJE, Constantes.A_ESCRIBIR_MENSAJE);
+        redireccion = Constantes.V_MENSAJE;
+    } else if(accion.equals(Constantes.A_MENSAJE_LEER)){
+        if(request.getParameter("id")!=null){
+            String idMensaje = (String)request.getParameter("id");
+            session.setAttribute(Constantes.S_ACCION_MENSAJE, Constantes.A_LEER_MENSAJE);
+            session.setAttribute(Constantes.S_MENSAJE_ID, idMensaje);
+            redireccion = Constantes.V_MENSAJE;
+        } else {
+            redireccion = Constantes.V_ENTRADA_USER;            
+        }
+    } else if(accion.equals(Constantes.A_MENSAJE_BORRAR)){
+        if(request.getParameter("id")!=null){
+            int idMensaje = Integer.parseInt(request.getParameter("id"));
+            ConexionEstatica.borrarMensaje(idMensaje);
+            redireccion = Constantes.V_MENSAJE;
+        } else {
+            redireccion = Constantes.V_ENTRADA_USER;            
+        }
+    } else if(accion.equals("conectados")){
+        LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
+        String[] usuarios = new String[usuariosConectados.size()-1];
+        int j=0;
+        for (int i = 0; i < usuariosConectados.size(); i++) {
+                Usuario get = usuariosConectados.get(i);
+                if(get.getId()!=usuario.getId()){
+                    usuarios[j]="{\"id\":"+get.getId()+",\"nombre\":\""+get.getNombre()+" "+get.getApellidos()+"\"}";
+                    j++;
+                }
+                
+            }
+        out.print("["+(usuarios.length>0?String.join(",", usuarios):"")+"]");
+        
+    } else if(accion.equals(Constantes.A_DEJAR_AMIGO)){
+        int id = Integer.parseInt(request.getParameter("id"));
+        ConexionEstatica.eliminarAmistad(usuario.getId(),id);
     } else if(accion.equals(Constantes.A_SALIR)){
+        LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
+        boolean encontrado = false;
+        for (int i = 0; !encontrado && i < usuariosConectados.size(); i++) {
+            Usuario u=usuariosConectados.get(i);
+            if(u.getId()==usuario.getId()){
+                encontrado=true;
+                usuariosConectados.remove(i);
+            }   
+        }
+        application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);
+        
     } else {
+        if(usuario==null && session.getAttribute(Constantes.S_USUARIO)!=null){
+            usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
+        }
+        if(usuario!=null){
+            LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
+            boolean encontrado = false;
+            for (int i = 0; i < usuariosConectados.size() && !encontrado; i++) {
+                Usuario u=usuariosConectados.get(i);
+                if(u.getId()==usuario.getId()){
+                    encontrado=true;
+                    usuariosConectados.remove(i);
+                }   
+            }
+            application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);         
+        }
         session.invalidate();
         redireccion= Constantes.V_INDEX;
     }
@@ -159,6 +265,7 @@
     if(redireccion!=null && !redireccion.isEmpty()){
         response.sendRedirect(redireccion);
     } else {
+        if(!accion.equals("conectados"))
         response.sendRedirect(Constantes.V_IDONTKNOW);
     }
 %>

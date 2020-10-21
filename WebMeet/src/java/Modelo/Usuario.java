@@ -24,6 +24,7 @@ public class Usuario {
     private String pais = "";
     private String ciudad = "";
     private LinkedList<Integer>roles = new LinkedList<>();
+    private LinkedList<Preferencia> preferencias = new LinkedList<>();
     public Usuario() {
     }
     public Usuario (String email,String nombre,String apellidos){

@@ -14,18 +14,18 @@
     // Recupera la acción 
     String accion = request.getParameter("accion");    
     if(session.getAttribute(Constantes.S_USUARIO)==null){
-        session.invalidate();
-        response.sendRedirect(Constantes.V_INDEX);
-    }
+        session.setAttribute(Constantes.S_ACCION, Constantes.A_SALIR);
+        response.sendRedirect(Constantes.C_BASICO);
+    }    
     Usuario usuario = (Usuario)session.getAttribute(Constantes.S_USUARIO);
     if(!usuario.isRol(Constantes.ROL_ADMIN)){
         session.invalidate();
         response.sendRedirect(Constantes.V_INDEX);
     }    
     // cargarDatos Determina si se deben recuperar/cargar datos
-    //0=>Roles
+    //0=>Usuario; 1=>Roles
     //
-    boolean[] cargarDatos = {false};
+    boolean[] cargarDatos = {false,false};
     // Almacena la dirección a la que se redirecciona el controlador al final del script
     String redireccion = null;
     LinkedList<Auxiliar> roles = new LinkedList<>();    
@@ -52,27 +52,31 @@
         }else if (request.getParameter(Constantes.A_CRUD_AGREGAR) != null) {
             accion = Constantes.A_CRUD_AGREGAR;
         }else if (request.getParameter(Constantes.A_SALIR) != null) {
-            session.invalidate();
-            response.sendRedirect(Constantes.V_INDEX);
+            accion = Constantes.A_SALIR;
         } else {
             accion = "";
             redireccion = Constantes.V_INDEX;
         }
     }
     
-    if(accion.equals("Acceder")){
-    } else if(accion.equals("Registrar")){
-    } else if(accion.equals("entrada")){
+    System.out.println("Accion "+accion);
+    if(accion.equals(Constantes.A_SALIR)){
+        cargarDatos[0]=true;
     }
     
-    if(cargarDatos[0]){//Roles
+    if(cargarDatos[0]){//Usuario
+        if(session.getAttribute(Constantes.S_USUARIO)==null){
+            session.setAttribute(Constantes.S_ACCION, Constantes.A_SALIR);
+            response.sendRedirect(Constantes.C_BASICO);
+        }
+        usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
+    } else if(cargarDatos[1]){//Roles
         if(session.getAttribute(Constantes.S_ROLES)!=null){
             roles = (LinkedList<Auxiliar>)session.getAttribute(Constantes.S_ROLES);
         } else {
             roles = ConexionEstatica.getRolesUsuario();
         }
     }
-    System.out.println("Accion "+accion);
     //**************************
     //ACCIONES
     if (accion.equals(Constantes.A_TABLA_USUARIOS)) {
@@ -84,8 +88,7 @@
     } else if(accion.equals(Constantes.A_EDITAR_MI_USUARIO)){
         session.setAttribute(Constantes.S_USUARIO_FORMULARIO,usuario);
         session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_EDITAR_USUARIO);
-        redireccion=Constantes.V_FORMULARIO_USUARIO;                
-        
+        redireccion=Constantes.V_FORMULARIO_USUARIO;                        
     } else if(accion.equals(Constantes.A_CRUD_ACTIVAR)){
         try{
             int id = Integer.parseInt(request.getParameter("id"));
@@ -211,7 +214,34 @@
             session.setAttribute(Constantes.S_MSG_INFO, "Los password no son iguales");
             redireccion = Constantes.V_FORMULARIO_USUARIO;            
         }
+        
+    } else if(accion.equals(Constantes.A_SALIR)){
+        LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
+        boolean encontrado = false;
+        for (int i = 0; i < usuariosConectados.size() && !encontrado; i++) {
+            Usuario u=usuariosConectados.get(i);
+            if(u.getId()==usuario.getId()){
+                encontrado=true;
+                usuariosConectados.remove(i);
+            }   
+        }
+        application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);
     } else {
+        if(usuario==null && session.getAttribute(Constantes.S_USUARIO)!=null){
+            usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
+        }
+        if(usuario!=null){
+            LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
+            boolean encontrado = false;
+            for (int i = 0; i < usuariosConectados.size() && !encontrado; i++) {
+                Usuario u=usuariosConectados.get(i);
+                if(u.getId()==usuario.getId()){
+                    encontrado=true;
+                    usuariosConectados.remove(i);
+                }   
+            }
+            application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);         
+        }
         session.invalidate();
         redireccion= Constantes.V_INDEX;
     }

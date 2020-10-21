@@ -23,6 +23,7 @@
     --tabla-cabecera-text: #b8c7d8;
     --fila-even-text: #282f38;
     --fila-odd-text: #282f38;
+    --usuario-conectado: #62bf62;
 }
 
 /* REJILLA */
@@ -109,6 +110,7 @@ header img.logo {
     width: 60px;
     animation-name: rodarLogo;
     animation-duration: 2s;
+    cursor: pointer;
 }
 form {
     display: block;
@@ -149,8 +151,8 @@ input[type="submit"].rounded,button.rounded {
     cursor: pointer;
 }
 button.rounded.mini {
-    padding: 10px;
-    width: auto;
+    padding: 6px;
+    width: min-content;
 }
 input[type="submit"]:active {
     background: var(--button-shadow-color);
@@ -219,15 +221,22 @@ nav ul li:nth-child(4),nav ul li:nth-child(5) {
     justify-content: flex-end;
     align-items: center;
 }
+.left {
+    display: flex;
+    justify-content: flex-start;
+}
 .fila button {
     float: right;
 }
 .toolbar {
     background: var(--menu-color);
     color: var(--menu-text-color);
+    min-height: 35px;
 }
 .toolbar>div {
     padding: 0;
+    display: flex;
+    align-items: center;
 }
 div.right > * {
     /* float: right; */
@@ -236,7 +245,7 @@ div.right > * {
 div.left > * {
     float: left;
 }
-.toolbar button,.toolbar input {
+.toolbar button, .toolbar input, .mensajes button {
     border-radius: unset;
     background: transparent;
     box-shadow: unset;
@@ -308,4 +317,92 @@ main.formulario.usuario form {
 .fila:nth-child(even) {
     background: var(--fila-even);
     color: var(--fila-even-text);
+}
+
+/** CUADRO AMISTADES **/
+div.amigos, div.mensajes {
+    height: 45vh;
+}
+.amigos>div {
+    margin: 0px;
+    padding: 5px;
+    background: var(--fila-even);
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+}
+.amigos form {
+    display: flex;
+}
+
+.amigos form div {
+    flex: 1;
+}
+i.usuarioConectado.activo {
+    color: var(--usuario-conectado);
+}
+.amigos h2 {
+    font-size: 1.2em;
+    text-align: center;
+}
+.mensajes button {min-width: auto;}
+
+.mensajes label {
+    text-align: center;
+}
+div.mensajes {
+    overflow: auto;
+}
+
+div.mensajes .row.toolbar {
+    position: sticky;
+    top: 0;
+    height: 5vh;
+}
+.mensajes .toolbar form {
+    margin: 0px 15px;
+}
+.mensajes h3 {
+    margin: 4px 10px;
+}
+.mensajes .mensaje {
+    display: flex;
+    padding: 5px 10px;
+    cursor: pointer;
+    justify-content: flex-start;
+    align-items: center;
+}
+.mensajes form button {
+    padding: 0px;
+    margin: 0;
+}
+
+.mensaje .campo {
+    flex: 1;
+    margin: 0 5px;
+}
+div#recibidos {
+    height: 38vh;
+    background: var(--fila-odd);
+}
+
+div#enviados {
+    height: 0vh;
+    background: var(--fila-even);
+}
+
+div#recibidos,div#enviados {
+    position: relative;
+    transition: height 1s;
+    overflow: hidden;
+}
+
+/**  MENSAJES  **/
+
+main.formulario.mensaje form{
+    margin: 1em auto;
+    width: 60%;
+}
+main.formulario.mensaje form a {
+    cursor: pointer;
 }
