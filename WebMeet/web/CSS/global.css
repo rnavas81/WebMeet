@@ -245,7 +245,7 @@ div.right > * {
 div.left > * {
     float: left;
 }
-.toolbar button, .toolbar input, .mensajes button {
+.toolbar button, .toolbar input, .mensajes button, .noamigos button,.solicitudes form button {
     border-radius: unset;
     background: transparent;
     box-shadow: unset;
@@ -323,7 +323,10 @@ main.formulario.usuario form {
 div.amigos, div.mensajes {
     height: 45vh;
 }
-.amigos>div {
+div.noamigos,div.solicitudes {
+    height: 36vh;
+}
+.amigos>div,.noamigos>div, .solicitudes>div {
     margin: 0px;
     padding: 5px;
     background: var(--fila-even);
@@ -337,6 +340,7 @@ div.amigos, div.mensajes {
 
 .amigos form div {
     flex: 1;
+    cursor: default;
 }
 i.usuarioConectado.activo {
     color: var(--usuario-conectado);
@@ -345,7 +349,7 @@ i.usuarioConectado.activo {
     font-size: 1.2em;
     text-align: center;
 }
-.mensajes button {min-width: auto;}
+.mensajes button, .noamigos button,.solicitudes form button {min-width: auto;}
 
 .mensajes label {
     text-align: center;
@@ -365,19 +369,22 @@ div.mensajes .row.toolbar {
 .mensajes h3 {
     margin: 4px 10px;
 }
-.mensajes .mensaje {
+.mensajes .mensaje, .noamigos .fila1,.solicitudes .fila1 {
     display: flex;
     padding: 5px 10px;
-    cursor: pointer;
+    cursor: default;
     justify-content: flex-start;
     align-items: center;
 }
-.mensajes form button {
+.mensajes .mensaje {
+    cursor: pointer;    
+}
+.mensajes form button, .noamidos form button, .solicitudes form button {
     padding: 0px;
     margin: 0;
 }
 
-.mensaje .campo {
+.mensaje .campo, .noamigos .campo,.solicitudes .campo {
     flex: 1;
     margin: 0 5px;
 }

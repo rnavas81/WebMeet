@@ -25,6 +25,7 @@ public class Usuario {
     private String ciudad = "";
     private LinkedList<Integer>roles = new LinkedList<>();
     private LinkedList<Preferencia> preferencias = new LinkedList<>();
+    private int total=0;
     public Usuario() {
     }
     public Usuario (String email,String nombre,String apellidos){
@@ -141,5 +142,47 @@ public class Usuario {
     public boolean isRol(final int i){
         return this.roles.contains(i);
     }
+    public void addPreferencia(Preferencia preferencia){
+        boolean existe=false;
+        for (int i = 0;!existe && i < preferencias.size(); i++) {
+            Preferencia get = preferencias.get(i);
+            if(get.getId()==preferencia.getId()){
+                existe=true;
+            }
+        }
+        if(!existe){
+            this.preferencias.add(preferencia);
+        }
+    }
+    public Preferencia getPreferenciaById(int id){
+        for (Preferencia preferencia : this.preferencias) {
+            if(preferencia.getId()==id)return preferencia;
+        }
+        return null;
+    }
+    public Preferencia getPreferenciaByIndex(int index){
+        if(index<this.preferencias.size()){
+            return this.preferencias.get(index);
+        } else {
+            return null;
+        }
+    }
+
+    public LinkedList<Preferencia> getPreferencias() {
+        return preferencias;
+    }
+
+    public void setPreferencias(LinkedList<Preferencia> preferencias) {
+        this.preferencias = preferencias;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+    
     
 }

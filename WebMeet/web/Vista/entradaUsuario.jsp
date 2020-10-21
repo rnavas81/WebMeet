@@ -4,11 +4,14 @@
     Author     : rodrigo
 --%>
 
+<%@page import="Auxiliar.Funciones"%>
+<%@page import="Auxiliar.Constantes"%>
 <%@page import="Modelo.Mensaje"%>
 <%@page import="Modelo.ConexionEstatica"%>
-<%@page import="java.util.LinkedList"%>
 <%@page import="Modelo.Usuario"%>
-<%@page import="Auxiliar.Constantes"%>
+<%@page import="Modelo.Preferencia"%>
+<%@page import="Modelo.Auxiliar"%>
+<%@page import="java.util.LinkedList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,11 +31,20 @@
         Usuario usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
         LinkedList<Usuario> amigos = ConexionEstatica.obtenerAmigos(usuario);
         LinkedList<Usuario> noamigos = ConexionEstatica.obtenerNoAmigos(usuario);
+        LinkedList<Usuario> pendientes = ConexionEstatica.obtenerAmigosPendientes(usuario);
+        //LinkedList<Usuario> noamigos = Funciones.calcularCompatibilidad(usuario,otros);
         LinkedList<Mensaje> mensajesRecibidos = ConexionEstatica.obtenerMensajesRecibidos(usuario);
         LinkedList<Mensaje> mensajesEnviados = ConexionEstatica.obtenerMensajesEnviados(usuario);
         LinkedList<Usuario> conectados=new LinkedList<>();
         if(application.getAttribute(Constantes.AP_USUARIOS)!=null){
             conectados = (LinkedList<Usuario>) application.getAttribute(Constantes.AP_USUARIOS);
+        }
+        LinkedList<Auxiliar> preferencias = new LinkedList<>();
+        if(session.getAttribute(Constantes.S_PREFERENCIAS)!=null){
+            preferencias = (LinkedList<Auxiliar>)session.getAttribute(Constantes.S_PREFERENCIAS);
+        } else {
+            preferencias = ConexionEstatica.getPreferencias();
+            session.setAttribute(Constantes.S_PREFERENCIAS, preferencias);
         }
         
     %>
@@ -126,15 +138,53 @@
                     </div>
                 </div>
                 <!-- BUSCAR GENTE -->
-                <div class="col-8 col-m-8">
-                    <h2>Aún no son amigos</h2>
-                    <%
-                        
-                        %>
+                <div class="col-8 col-m-8 noamigos">
+                    <div>
+                        <div class="fila1">
+                            <div class="campo">Usuario</div>
+                            <% for (Auxiliar preferencia : preferencias) {%>
+                            <div class="campo"><%=preferencia.getNombre()%></div>
+                            <% }%>
+                            <div class="campo"></div>
+                        </div>
+                    <% for (Usuario noamigo : noamigos) {%>
+                        <div class="fila1">
+                            <div class="campo"><%=noamigo.getNombre()+" "+noamigo.getApellidos()%></div>
+                            <% for (Preferencia preferencia : noamigo.getPreferencias()) {%>
+                            <div class="campo"><%=preferencia.getValor()%></div>
+                            <% }%>                           
+                            <form action="<%=Constantes.C_BASICO%>" method="POST">
+                                <input type="hidden" name="id" value="<%=noamigo.getId()%>">
+                                <button type="submit" class="" name="<%=Constantes.A_SOLICITAR_AMISTAD%>">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button type="submit" class="" name="<%=Constantes.A_ENVIAR_MENSAJE%>">
+                                    <i class="fas fa-envelope"></i>
+                                </button>
+                            </form>
+                        </div>
+                    <% }%>
+                    </div>
                 </div>
                 <!-- SOLICITUDES PENDIENTES -->
-                <div class="col-4 col-m-4">
-                    <h2>Solicitudes</h2>
+                <div class="col-4 col-m-4 solicitudes">
+                    <div>
+                        <h2>Solicitudes</h2> 
+                        <% for (Usuario user : pendientes) {%>
+                            <div class="fila1">
+                                <div class="campo"><%=user.getNombre()+" "+user.getApellidos()%></div>
+                                <form action="<%=Constantes.C_BASICO%>" method="POST">
+                                    <input type="hidden" name="id" value="<%=user.getId()%>">
+                                    <button type="submit" class="" name="<%=Constantes.A_ACEPTAR_AMISTAD%>">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button type="submit" class="" name="<%=Constantes.A_DEJAR_AMIGO%>">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        <% }%>                       
+                    </div>
                 </div>
             </div>                 
         </main>

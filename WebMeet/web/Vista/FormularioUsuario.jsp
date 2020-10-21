@@ -26,6 +26,7 @@ como para editar las existentes
         <script src="<%=Constantes.J_OWNCAPTCHA%>"></script>
     </head>
     <%
+        Usuario usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
         String msg_info = "";
         String accion = (String)session.getAttribute(Constantes.S_ACCION_FORMULARIO);
         String boton_accion = Constantes.A_AGREGAR;
@@ -51,6 +52,13 @@ como para editar las existentes
             controlador = Constantes.C_ADMIN;
             cargar[0]=true;
             cargar[1]=true;
+        } else if(accion.equals(Constantes.A_EDITAR_USUARIO_BASICO)){
+            expandido=true;
+            boton_accion = Constantes.A_MODIFICAR;
+            controlador = Constantes.C_BASICO;
+            cargar[0]=true;
+            cargar[1]=true;
+            accion = Constantes.A_EDITAR_USUARIO;
         } else if(accion.equals(Constantes.A_AGREGAR_USUARIO)){
             expandido=true;
             controlador = Constantes.C_ADMIN;
@@ -176,16 +184,19 @@ como para editar las existentes
                             </div>
                             <input class="col-m-8 col-8" campo type="text" name="ciudad" maxlength="500"
                                    value="<%=userData.getCiudad()%>"/>
+                            <% if(usuario.isRol(Constantes.ROL_ADMIN)){%>
                             <!-- ROLES -->
                             <span class="col-m-12 col-12 error_msg roles"></span>
                             <div class="col-m-12 col-12">
                                 <i class="fas fa-tasks"></i>&nbsp<label>Roles</label>
                             </div>
+                            
                             <% for(Auxiliar rol:roles){%>
                             <div class="col-m-<%=12/roles.size()%> col-<%=12/roles.size()%>">
                                 <label><%=rol.getNombre()%></label><input class="" type="checkbox" name="roles" value="<%=rol.getId()%>" <%=userData.isRol(rol.getId())?"checked":""%>/>
                             </div>
-                            <% }%>
+                            <% }
+                            }%>
                             <input type="hidden" name="id" value="<%=userData.getId()%>">
                             <% } %>
                             <!-- CAPTCHA -->
@@ -201,7 +212,7 @@ como para editar las existentes
                                 <input type="submit" name="<%=accion%>" value="<%=boton_accion%>">
                             </div>
                             <div class="col-m-2 col-2">
-                                <input type="submit" name="<%=accion%>"   value="<%=Constantes.A_CANCELAR%>">
+                                <input type="submit" name="<%=accion%>" value="<%=Constantes.A_CANCELAR%>">
                             </div>
                         </div>
                     </form>

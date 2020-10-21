@@ -59,9 +59,9 @@ public class ConexionEstatica {
         }
     }
     private static Usuario recogerDatosUsuario() {
-        Usuario p;
+        Usuario u;
         try {
-            p = new Usuario(
+            u = new Usuario(
                 Conj_Registros.getInt("id"),
                 Conj_Registros.getInt("activo"),
                 Conj_Registros.getString("email"),
@@ -77,18 +77,26 @@ public class ConexionEstatica {
                 if(Conj_Registros.getString("roles")!=null){
                     String[] roles = Conj_Registros.getString("roles").split(",");
                     for(String rol:roles){
-                        p.setRol(Integer.parseInt(rol));
+                        u.setRol(Integer.parseInt(rol));
                     }                
                 }
             } catch (Exception e) {
                 System.err.println("recogerDatosUsuarioRol[Error] "+e.getMessage());
             }
+            PreparedStatement query = Conex.prepareStatement(Consultas.getPreferenciasById());
+            query.setInt(1, u.getId());
+            ResultSet registros = query.executeQuery();
+            Preferencia p = null;
+            while (registros.next()) {
+                p = new Preferencia(registros.getInt("id"), registros.getInt("preferencia"), registros.getString("nombre"), registros.getInt("valor"));
+                u.addPreferencia(p);
+            }
         } catch (Exception e) {
             System.err.println(e.getCause());
             System.err.println("recogerDatosUsuario[Error] "+e.getMessage());
-            p=null;
+            u=null;
         }
-        return p;
+        return u;
     }
     
     private static Mensaje recogerDatosMensaje() {
@@ -537,6 +545,32 @@ public class ConexionEstatica {
             if(!estabaAbierta)cerrarBD();
         }
         return personasBD;
+    } 
+    public static LinkedList<Usuario> obtenerAmigosPendientes(Usuario usuario){
+        LinkedList<Usuario> personasBD = new LinkedList<>();
+        boolean estabaAbierta = true;
+        try {
+            if(Conex==null || Conex.isClosed()){
+                estabaAbierta = false;
+                abrirBD();
+            }
+            Sentencia_preparada = Conex.prepareStatement(Consultas.getAmigosPendientesById());
+            Sentencia_preparada.setInt(1, usuario.getId());
+            Sentencia_preparada.setInt(2, usuario.getId());
+            Sentencia_preparada.setInt(3, usuario.getId());
+            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
+            Usuario element;
+            while (Conj_Registros.next()) {
+                element = recogerDatosUsuario();
+                if(element!=null)personasBD.add(element);
+            }
+        } catch (SQLException ex) {
+            System.err.println("obtenerUsuarios[Error] "+ex.getMessage());
+            personasBD = new LinkedList<>();
+        } finally {
+            if(!estabaAbierta)cerrarBD();
+        }
+        return personasBD;
     }    
     ///NO AMIGOS
     public static LinkedList<Usuario> obtenerNoAmigos(Usuario usuario){
@@ -587,8 +621,53 @@ public class ConexionEstatica {
         } finally {
             if(!estabaAbierta)cerrarBD();
         }
+        return hecho;          
+    }
+    public static boolean aceptarAmistad(int id1,int id2){
+        boolean hecho;
+        boolean estabaAbierta = true;
+        try {
+            if(Conex==null || Conex.isClosed()){
+                estabaAbierta = false;
+                abrirBD();
+            }
+            Sentencia_preparada = Conex.prepareStatement(Consultas.aceptarAmistad());
+            //remitente,destinatario,titulo,mensaje
+            Sentencia_preparada.setInt(1, id1);
+            Sentencia_preparada.setInt(2, id2);
+            Sentencia_preparada.setInt(3, id2);
+            Sentencia_preparada.setInt(4, id1);
+            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
+            hecho = Conj_Registros.next();
+        } catch (SQLException ex) {
+            System.err.println("agregarMensaje[Error] "+ex.getMessage());
+            hecho = false;
+        } finally {
+            if(!estabaAbierta)cerrarBD();
+        }
+        return hecho;          
+    }
+    public static boolean solicitarAmistad(int id1,int id2){
+        boolean hecho;
+        boolean estabaAbierta = true;
+        try {
+            if(Conex==null || Conex.isClosed()){
+                estabaAbierta = false;
+                abrirBD();
+            }
+            Sentencia_preparada = Conex.prepareStatement(Consultas.insertAmistad());
+            //remitente,destinatario,titulo,mensaje
+            Sentencia_preparada.setInt(1, id1);
+            Sentencia_preparada.setInt(2, id2);
+            ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
+            hecho = Conj_Registros.next();
+        } catch (SQLException ex) {
+            System.err.println("agregarMensaje[Error] "+ex.getMessage());
+            hecho = false;
+        } finally {
+            if(!estabaAbierta)cerrarBD();
+        }
         return hecho;  
-        
     }
     ///MENSAJES
     public static Mensaje obtenerMensaje(int id){
@@ -601,11 +680,9 @@ public class ConexionEstatica {
             }
             Sentencia_preparada = Conex.prepareStatement(Consultas.getMensajeById());
             Sentencia_preparada.setInt(1, id);
-            System.out.println(Sentencia_preparada);
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             if(Conj_Registros.next()) {
                 mensaje = recogerDatosMensaje();
-                System.out.println(mensaje.getTitulo());
             }
         } catch (SQLException ex) {
             System.err.println("obtenerUsuarios[Error] "+ex.getMessage());

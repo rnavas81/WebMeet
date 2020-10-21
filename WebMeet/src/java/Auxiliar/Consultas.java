@@ -183,7 +183,10 @@ public class Consultas {
     }
 
     public static String getPreferenciasById() {
-        return "SELECT "+String.join(",",CAMPOS_PREFERENCIAS)+" FROM "+Constantes.T_USUARIOS_PREFERENCIAS+" WHERE usuario = ?;";
+        return "SELECT "+getCampos(CAMPOS_PREFERENCIAS,"p")+",a.nombre "
+                + "FROM "+Constantes.T_USUARIOS_PREFERENCIAS+" p "
+                + "RIGHT JOIN "+Constantes.T_AUXILIAR+" a ON a.id=p.preferencia "
+                + "WHERE usuario = ?;";
     }
 
     public static String insertPreferencia() {
@@ -196,14 +199,23 @@ public class Consultas {
                 + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=u.id) AS roles "
                 + "FROM "+Constantes.T_USUARIOS_AMISTADES+" a " 
                 + "LEFT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=IF(a.usuario1= ? ,a.usuario2,a.usuario1) "
-                + "WHERE a.usuario1= ? || a.usuario2= ?";
+                + "WHERE (a.usuario1= ? || a.usuario2= ?) AND a.aceptada=1";
     }
-    public static String getNoAmigosById() {
+    public static String getAmigosPendientesById() {
         return "SELECT " +getCampos(CAMPOS_USUARIO, "u")
                 + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=u.id) AS roles "
                 + "FROM "+Constantes.T_USUARIOS_AMISTADES+" a " 
                 + "LEFT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=IF(a.usuario1= ? ,a.usuario2,a.usuario1) "
-                + "WHERE a.usuario1!= ? && a.usuario2!= ?";
+                + "WHERE (a.usuario1= ? || a.usuario2= ?) AND a.aceptada=0";
+    }
+    public static String getNoAmigosById() {
+        return "SELECT " +getCampos(CAMPOS_USUARIO, "u")+" "
+                + "FROM "+Constantes.T_USUARIOS+" u "
+                + "RIGHT JOIN "+Constantes.T_USUARIOS_ROLES+" r ON r.usuario=u.id AND r.rol="+Constantes.ROL_USER+" "
+                + "WHERE u.id!= ? AND u.id NOT IN("
+                    + "SELECT usuario1 AS usuario FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE usuario2=? " 
+                    + "UNION "
+                    + "SELECT usuario2 AS usuario FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE usuario1=?);";
     }
 
     public static String getUsuarioMensajesRecibidos() {
@@ -236,8 +248,15 @@ public class Consultas {
     public static String borrarMensaje() {
         return "DELETE FROM "+Constantes.T_MENSAJES+" WHERE id=?";
     }
+    public static String aceptarAmistad(){
+        return "UPDATE "+Constantes.T_USUARIOS_AMISTADES+" SET aceptada=1 WHERE (usuario1=? AND usuario2=?) OR (usuario1=? AND usuario2=?);";
+    }
 
     public static String deleteAmistad() {
         return "DELETE FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE (usuario1=? AND usuario2=?) OR (usuario1=? AND usuario2=?);";
+    }
+
+    public static String insertAmistad() {
+        return "INSERT INTO "+Constantes.T_USUARIOS_AMISTADES+" (usuario1,usuario2) VALUE (?,?);";
     }
 }

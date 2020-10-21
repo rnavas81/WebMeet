@@ -5,8 +5,11 @@
  */
 package Auxiliar;
 
+import Modelo.Preferencia;
+import Modelo.Usuario;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
 
 /**
  *
@@ -68,6 +71,31 @@ public class Funciones {
             generatedHash = null;
         }
         return generatedHash;
+    }
+    public static LinkedList<Usuario> calcularCompatibilidad(Usuario usuario,LinkedList<Usuario> otros){
+        LinkedList<Usuario> lista=new LinkedList<>();
+        for (Usuario otro : otros) {
+            int total = 0;
+            for (Preferencia preferencia : otro.getPreferencias()) {
+                Preferencia pu = usuario.getPreferenciaById(preferencia.getId());
+                preferencia.setValor(pu.getValor() - preferencia.getValor());
+                total += preferencia.getValor();
+            }
+            otro.setTotal(total);
+            if(lista.isEmpty()){
+                lista.add(otro);
+            } else {
+                boolean puesto=false;
+                for (int i = 0; !puesto && i < lista.size(); i++) {
+                    Usuario get = lista.get(i);
+                    if(get.getTotal()>otro.getTotal()){
+                        lista.add(i, otro);
+                        puesto=true;
+                    }
+                }
+            }
+        }
+        return lista;
     }
  
 }

@@ -96,6 +96,7 @@ public class Constantes {
     public static final String A_CREAR_USUARIO = "nuevoUsuario";
     public static final String A_AGREGAR_USUARIO = "agregarUsuario";
     public static final String A_EDITAR_USUARIO = "editarUsuario";
+    public static final String A_EDITAR_USUARIO_BASICO = "editarUsuarioBasico";
     public static final String A_EDITAR_MI_USUARIO = "editarMiUsuario";
     public static final String A_RECUPERAR_USUARIO = "recuperarUsuario";
     public static final String A_TABLA_USUARIOS = "tablaUsuarios";
@@ -119,6 +120,9 @@ public class Constantes {
     public static final String A_MENSAJE_BORRAR = "mensajeBorrar";
     public static final String A_LEER_MENSAJE = "leerMensaje";
     public static final String A_ESCRIBIR_MENSAJE = "escribirMensaje";
+    public static final String A_SOLICITAR_AMISTAD = "solicitarAmistad";
+    public static final String A_ACEPTAR_AMISTAD = "acpetarAmistad";
+    public static final String A_RECHAZAR_AMISTAD = "rechazarAmistad";
 
     //ARCHIVOS SUBIDOS
     public static final String SUBIDOS_DIR = ROOT_FILES + "/Subidos";
