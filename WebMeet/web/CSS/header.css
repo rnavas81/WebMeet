@@ -1,0 +1,73 @@
+/* 
+    Created on : 23 oct. 2020, 18:33:34
+    Author     : rodrigo
+    Estilo para la cabecera
+*/
+
+
+header {
+    display: block;
+    height: 13vh;
+    background: var(--background-color);
+}
+
+header form {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+header form>div {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+header form>div:first-child {
+    justify-content: flex-start;
+}
+
+header form>div:last-child {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header img.logo {
+    position: relative;
+    left: 10px;
+    top: 0px;
+    animation-name: rodarLogo;
+    animation-duration: 2s;
+    cursor: pointer;
+    width: 11vh;
+}
+
+header input[type="submit"],header button {
+    background: var(--button-background);
+    border: none;
+    border-radius: 10px;
+    box-sizing: border-box;
+    color: var(--button-color);
+    margin: 1px;
+    min-width: 115px;
+    padding: 15px 25px;
+    width: auto;
+    cursor: pointer;
+    outline: none;
+}
+
+header input[type="submit"].rounded,header button.rounded {
+    width: 40px;
+    min-width: 0;
+    border-radius: 50%;
+    padding: 11px;
+    color: var(--button-color);
+    cursor: pointer;
+    margin: 5px;
+}

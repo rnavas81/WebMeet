@@ -1,0 +1,407 @@
+/* 
+    Created on : 15 oct. 2020, 10:43:20
+    Author     : rodrigo
+*/
+/* VARIABLES GLOBALES */
+
+
+/* REJILLA */
+
+.row::after 
+{
+    content: "";
+    clear: both;
+    display: block;
+}
+
+[class*="col-"] 
+{
+    width: 100%;
+}
+
+@media screen and (min-width: 600px) 
+{
+    .col-m-1 {width: 8.33%;}
+    .col-m-2 {width: 16.66%;}
+    .col-m-3 {width: 25%;}
+    .col-m-4 {width: 33.33%;}
+    .col-m-5 {width: 41.66%;}
+    .col-m-6 {width: 50%;}
+    .col-m-7 {width: 58.33%;}
+    .col-m-8 {width: 66.66%;}
+    .col-m-9 {width: 75%;}
+    .col-m-10 {width: 83.33%;}
+    .col-m-11 {width: 91.66%;}
+    .col-m-12 {width: 100%;}
+}
+
+@media  screen and (min-width: 768px) 
+{
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+}
+
+
+/* Los elementos que tienen el atributo class con una clase que en su nombre comienza
+ * por col- les ponemos float left.  
+ * Box-sizing hace que los elementos se midan contando borde y padding ( por defecto
+ * no entran en la mediciÃ³n ). Esto hace que los porcentajes anteriores funcionen
+ * a la perfecciÃ³n.
+ */
+[class*="col-"] {
+    float: left;
+    box-sizing: border-box;
+    padding: 0.3em;
+    min-width: fit-content;
+}
+/** ANIMACIONES **/
+
+
+@keyframes rodarLogo {
+    0%   {left: 10px;}
+    50%  {left: 300px;transform: rotate(360deg);}
+    100% {left: 10px;}
+}
+
+/** ESTILO GLOBAL **/
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text-color);
+}
+html,body {
+    background: var(--background-color);
+}
+main {
+    height: 85vh;
+}
+form {
+    display: block;
+    margin: auto;
+}
+form label {}
+
+form input[campo],form select[campo] {
+    border: none;
+    border-radius: 9px;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 10px 10px;
+    outline: none;
+    background: whitesmoke;
+}
+
+input[type="submit"],button {
+    background: var(--button-background);
+    border: none;
+    border-radius: 10px;
+    /*box-shadow: 2px 2px 7px 1px var(--button-shadow-color);*/
+    box-sizing: border-box;
+    color: var(--button-color);
+    margin: 1px;
+    min-width: 115px;
+    padding: 15px 25px;
+    width: auto;
+    cursor: pointer;
+}
+
+input[type="submit"].rounded,button.rounded {
+    width: 50px;
+    min-width: 0;
+    border-radius: 50%;
+    padding: 15px;
+    color: var(--button-color);
+    cursor: pointer;
+}
+button.rounded.mini {
+    padding: 6px;
+    width: min-content;
+}
+input[type="submit"]:active {
+    background: var(--button-shadow-color);
+    box-shadow: 3px 3px 5px 0px var(--button-color);
+}
+
+label.required:before {
+    content: '*';
+    color: red;
+}
+span.error_msg,span#error_captcha {
+    color: #861a1a;
+}
+input:invalid:focus {
+    border-color: red;
+}
+main .botones {
+    margin-top: 2em;
+}
+.captcha {
+    margin: 10px 0;
+}
+span#error_captcha {
+    display: block;
+}
+canvas#captcha {
+    width: 60px;
+    position: relative;
+    top: 16px;
+}
+input#captchaInput {
+    width: 65px;
+}
+span.error_msg,span#error_captcha {
+    color: #861a1a;
+}
+main >div > nav {
+    background: var(--menu-color);
+}
+
+nav ul li {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+nav ul {
+    padding: 0;
+    margin: 9px 0;
+}
+
+nav ul li:hover {
+    font-weight: bold;
+}
+nav ul li:nth-child(4),nav ul li:nth-child(5) {
+    float: right;
+    margin: 0;
+    width: auto;
+}
+.cabecera div,.fila div {
+    color: inherit;
+}
+.right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.left {
+    display: flex;
+    justify-content: flex-start;
+}
+.fila button {
+    float: right;
+}
+.toolbar {
+    background: var(--menu-color);
+    color: var(--menu-text-color);
+    min-height: 35px;
+}
+.toolbar>div {
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+div.right > * {
+    /* float: right; */
+    justify-content: flex-end;
+}
+div.left > * {
+    float: left;
+}
+.toolbar button, .toolbar input, .mensajes button, .noamigos button,.solicitudes form button {
+    border-radius: unset;
+    background: transparent;
+    box-shadow: unset;
+    width: auto;
+    padding: 5px;
+    margin: 5px;
+}
+.toolbar input:focus,.toolbar button:focus {
+    outline: unset;
+}
+
+.toolbar input:hover,.toolbar button:hover {
+    font-weight: bold;
+}
+
+/** IDONTKNOW **/
+main.idontknow form {
+    margin: 1em auto;
+    width: fit-content;    
+}
+
+/**  LOGIN  **/
+main.login form {
+    position: relative;
+    margin: 10% auto;
+    width: 40%;
+    z-index: 10;
+}
+main.login img {
+    position: absolute;
+    right: 100px;
+    top: 145px;
+    z-index: 1;
+}
+main.login input#txtInput {
+    width: 60px;
+    height: 40px;
+}
+
+@media screen and (min-width: 1000px) 
+{
+    main.login img {
+        right: 100px;
+        top: 100px;
+    }
+}
+
+/** FORMUARIO USUARIOS **/
+main.formulario.usuario form {
+    margin: 1em auto;
+    width: 70%;
+
+}
+/** TABLA DATOS **/
+.cabecera {
+    background: var(--tabla-cabecera);
+    color: var(--tabla-cabecera-text);
+}
+.fila {
+    border-bottom: 1px solid;
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+}
+.fila:nth-child(odd) {
+    background: var(--fila-odd);
+    color: var(--fila-odd-text);
+}
+.fila:nth-child(even) {
+    background: var(--fila-even);
+    color: var(--fila-even-text);
+}
+
+/** CUADRO AMISTADES **/
+/* Calculo el espacio restante quitando la toolbar */
+main.cuadro>div {
+    height: 100%;
+    height: -webkit-calc(100% - 36px);
+    height: -moz-calc(100% - 36px);
+    height: calc(100% - 36px);
+}
+div.amigos, div.mensajes {
+    height: 50%;
+}
+div.noamigos,div.solicitudes {
+    height: 50%;
+}
+.amigos>div,.noamigos>div, .solicitudes>div {
+    margin: 0px;
+    padding: 5px;
+    background: var(--fila-even);
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+}
+.amigos form {
+    display: flex;
+}
+
+.amigos form div {
+    flex: 1;
+    cursor: default;
+}
+i.usuarioConectado.activo {
+    color: var(--usuario-conectado);
+}
+.amigos h2 {
+    font-size: 1.2em;
+    text-align: center;
+}
+.mensajes button, .noamigos button,.solicitudes form button {min-width: auto;}
+
+.mensajes label {
+    text-align: center;
+}
+div.mensajes {
+    overflow: auto;
+}
+
+div.mensajes .row.toolbar {
+    position: sticky;
+    top: 0;
+    height: 5vh;
+}
+.mensajes .toolbar form {
+    margin: 0px 15px;
+}
+.mensajes h3 {
+    margin: 4px 10px;
+}
+.mensajes .mensaje, .noamigos .fila1,.solicitudes .fila1 {
+    display: flex;
+    padding: 5px 10px;
+    cursor: default;
+    justify-content: flex-start;
+    align-items: center;
+}
+.mensajes .mensaje {
+    cursor: pointer;    
+}
+.mensajes form button, .noamidos form button, .solicitudes form button {
+    padding: 0px;
+    margin: 0;
+}
+
+.mensaje .campo, .noamigos .campo,.solicitudes .campo {
+    flex: 1;
+    margin: 0 5px;
+}
+div#recibidos {
+    height: 38vh;
+    background: var(--fila-odd);
+}
+
+div#enviados {
+    height: 0vh;
+    background: var(--fila-even);
+}
+
+div#recibidos,div#enviados {
+    position: relative;
+    transition: height 1s;
+    overflow: hidden;
+}
+
+/**  MENSAJES  **/
+
+main.formulario.mensaje form{
+    margin: 1em auto;
+    width: 60%;
+}
+main.formulario.mensaje form a {
+    cursor: pointer;
+}
+.fila1 .campo.malo {
+    color: red;
+}
+.fila1 .campo.regular {
+    color: orange;
+}
+.fila1 .campo.vale {
+    color: blue;
+}
+.fila1 .campo.bueno {
+    color: green;
+}

@@ -1,0 +1,25 @@
+/* 
+    Created on : 23 oct. 2020, 12:39:39
+    Author     : rodrigo
+*/
+
+div.popup {
+    position: absolute;
+    min-width: 20vw;
+    min-height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--pop-background);
+    border-radius: 1.4em;
+    border: 3px solid var(--pop-border);
+    top: -20vh;
+    left: 40vw;
+    z-index: 10;
+    transition: top 2s;
+}
+
+.popup span {
+    color: var(--pop-text);
+    font-weight: bold;
+}
