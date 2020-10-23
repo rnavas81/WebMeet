@@ -4,7 +4,7 @@
  * @created 2020/10/14
  */
 /*
-El password para admin1@email.com y a@email.com es 123a
+El password para todos es 123a
 */
 INSERT INTO WebMeet.Usuarios 
     (`activo`,`email`,`password`,`nombre`,`apellidos`,`genero`)
@@ -60,21 +60,26 @@ INSERT INTO WebMeet.Usuarios_Preferencias
 INSERT INTO WebMeet.Usuarios_Amistades 
     (`usuario1`,`usuario2`,`aceptada`)
     VALUES
-    (3,4,0),
-    (3,5,1),
+    (2,3,1),
+    (2,4,0),
+    (3,4,1),
+    (3,5,0),
     (4,5,1),
-    (6,5,0),
+    (4,6,0),
+    (5,6,1);
+    (5,2,0);
     (6,2,1);
+    (6,3,0);
 INSERT INTO WebMeet.Mensajes 
     (`remitente`,`destinatario`,`titulo`,`mensaje`,`fecha`,`leido`)
     VALUES
     (2,3,'Hola Pedro!!','Me gustaría conocerte','2020-10-10 09:00:00',1),
-    (2,4,'Hola Marta!!','Me gustaría conocerte','2020-10-10 09:00:00',1),
+    (2,4,'Hola Marta!!','Me gustaría conocerte','2020-10-10 09:05:00',1),
     (3,4,'Hola Marta!!','Hola, como estas?','2020-10-10 09:00:00',1),
     (3,5,'Hola Elena!!','Vaya mensaje','2020-10-10 09:10:00',0),
     (4,5,'Hola Elena!!','Esto no se si funciona','2020-10-11 09:10:00',1),
-    (4,6,'Hola Miguel!!','No debería escribir esto','2020-10-11 09:10:00',1),
-    (5,6,'Hola Miguel!!','','2020-10-12 09:10:00',0),
-    (5,2,'Hola Juan!!','','2020-10-12 09:10:00',0),
-    (6,2,'Hola Juan!!','Nos volvemos a encontrar','2020-10-13 09:10:00',0),
-    (6,3,'Hola Pedro!!','Nos volvemos a encontrar','2020-10-13 09:10:00',0);
+    (4,6,'Hola Miguel!!','No debería escribir esto','2020-10-11 09:15:00',1),
+    (5,6,'Hola Miguel!!','','2020-10-12 09:20:00',0),
+    (5,2,'Hola Juan!!','','2020-10-12 09:25:00',0),
+    (6,2,'Hola Juan!!','Nos volvemos a encontrar','2020-10-13 09:25:00',0),
+    (6,3,'Hola Pedro!!','Nos volvemos a encontrar','2020-10-13 09:30:00',0);

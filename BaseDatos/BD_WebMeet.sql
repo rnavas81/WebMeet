@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS WebMeet.Usuarios;
 DROP TABLE IF EXISTS WebMeet.Auxiliar;
 
 -- Crea la tabla auxiliar
--- 1=> ROLES; 2=> PREFERENCIAS; ·=>GENEROS
+-- 1=> ROLES; 2=> PREFERENCIAS; 3=>GENEROS
 CREATE TABLE WebMeet.Auxiliar (
     id          INT NOT NULL AUTO_INCREMENT,
     tipo        TINYINT NOT NULL,
