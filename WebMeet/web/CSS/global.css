@@ -103,14 +103,26 @@
 html,body {
     background: var(--background-color);
 }
+header {
+    height: 13vh;
+}
+
+main {
+    height: 85vh;
+}
+
+header form>div {
+    height: 11vh;
+}
+
 header img.logo {
     position: relative;
     left: 10px;
     top: 0px;
-    width: 60px;
     animation-name: rodarLogo;
     animation-duration: 2s;
     cursor: pointer;
+    width: 11vh;
 }
 form {
     display: block;
@@ -320,11 +332,18 @@ main.formulario.usuario form {
 }
 
 /** CUADRO AMISTADES **/
+/* Calculo el espacio restante quitando la toolbar */
+main.cuadro>div {
+    height: 100%;
+    height: -webkit-calc(100% - 36px);
+    height: -moz-calc(100% - 36px);
+    height: calc(100% - 36px);
+}
 div.amigos, div.mensajes {
-    height: 45vh;
+    height: 50%;
 }
 div.noamigos,div.solicitudes {
-    height: 36vh;
+    height: 50%;
 }
 .amigos>div,.noamigos>div, .solicitudes>div {
     margin: 0px;

@@ -26,7 +26,7 @@ window.onload = () => {
                 }
                 for(var index in response){
                     const item = response[index];
-                    if(document.getElementsByClassName(`usuarioConectado ${item.id}`).length>0){
+                    if(document.getElementsByClassName(`usuarioConectado ${item.id}`).length>0 && item.conectado){
                         document.getElementsByClassName(`usuarioConectado ${item.id}`)[0].className=document.getElementsByClassName(`usuarioConectado ${item.id}`)[0].className+" activo";
                     }
 

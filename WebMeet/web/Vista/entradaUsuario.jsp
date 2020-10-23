@@ -60,7 +60,7 @@
                 </div>
             </form>
         </header>
-        <main class="">
+        <main class="cuadro">
             <form class="row toolbar" action="<%=Constantes.C_ADMIN%>" method="POST">
                 <div class="col-6 col-m-6 left">
                     <% if(usuario.isRol(Constantes.ROL_ADMIN)){%>
@@ -124,7 +124,7 @@
                 </div>
                 <!-- AMIGOS -->
                 <div class="col-3 col-m-3 amigos">
-                    <div>
+                    <div id="amigosConectados">
                         <h2>Amigos</h2>
                         <% for(Usuario amigo:amigos){%>
                         <form class="row" action="<%=Constantes.C_BASICO%>" method="POST">

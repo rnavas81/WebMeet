@@ -46,9 +46,9 @@ const mensajes = {
 };
 
 validarFormulario = () => {
+
     const form = document.getElementById('formularioUsuario');
     let elementos = {};
-    refrescarCaptcha('captcha');
     for(name in mensajes){
         if(document.getElementsByName(name).length>0) {
             elementos[name] = {
@@ -74,6 +74,12 @@ validarFormulario = () => {
         if(event.submitter.value === 'Cancelar'){
             return true;
         }
+        if(event.submitter.value === 'Preferencias'){
+            if(!confirm("Si continua perderá los cambios no guardados,\n¿Desea continuar?")){
+                event.preventDefault();
+                return false;
+            }
+        }
         var valido = true;
         for (var name in elementos) {
             if (!elementos[name].input.validity.valid) {
@@ -88,12 +94,6 @@ validarFormulario = () => {
                 elementos[name].error.textContent = mensajes[name].match;
                 valido = false;
             }
-        }
-        if(!validarCaptchaCalculo('captchaInput','captcha')){
-            valido = false;
-            document.getElementById("error_captcha").textContent="Comprobación no valida";
-        } else {
-            document.getElementById("error_captcha").textContent="";            
         }
         if(!valido){
             event.preventDefault();

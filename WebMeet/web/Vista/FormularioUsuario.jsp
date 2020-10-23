@@ -23,7 +23,11 @@ como para editar las existentes
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
         <script src="<%=Constantes.J_FORMULARIOUSUARIO%>"></script>
-        <script src="<%=Constantes.J_OWNCAPTCHA%>"></script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=validarFormulario&render=explicit"
+            async defer>
+        </script>
+
+
     </head>
     <%
         Usuario usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
@@ -85,18 +89,19 @@ como para editar las existentes
             }
         }
         %>
-    <body onload="validarFormulario()">
+    <body>
         <header>  
             <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
         </header>
         <main class="formulario usuario">
+            <!-- MENSAJE DE INFO-->
+            <div class="popup">
+                <span class="col-m-12 col-12"><%=msg_info%></span>
+            </div>
             <div class="row">
                 <div class="col-m-12 col-12">
                     <form id="formularioUsuario"  action="<%=controlador%>" method="POST" novalidate>
-                        <div class="row">
-                            <!-- MENSAJE DE ERROR -->
-                            <span class="col-m-12 col-12"><%=msg_info%></span>
-                        </div>
+
                         <div class="row">
                             <% if(expandido){%>
                             <!-- ROLES -->
@@ -200,14 +205,17 @@ como para editar las existentes
                             <input type="hidden" name="id" value="<%=userData.getId()%>">
                             <% } %>
                             <!-- CAPTCHA -->
-                            <div class="col-m12 col-12">
-                                <span id="error_captcha" aria-live="assertive"></span>
-                                <canvas id="captcha"></canvas>  
-                                <input campo type="text" id="captchaInput"/>
-                                <button type="button" class="rounded" onclick="refrescarCaptcha('captcha');"><i class="fas fa-redo-alt"></i></button>
+                            <div class="col-m-2 col-2">
+                                <div id="html_captcha"></div>
                             </div>
+
                         </div>
                         <div class="row botones">
+                            <% if(accion==Constantes.A_EDITAR_USUARIO){%>
+                            <div class="col-m-2 col-2">
+                                <input type="submit" name="<%=Constantes.A_AGREGAR_PREFERENCIAS%>" value="Preferencias">
+                            </div>
+                            <% }%>
                             <div class="col-m-2 col-2">
                                 <input type="submit" name="<%=accion%>" value="<%=boton_accion%>">
                             </div>

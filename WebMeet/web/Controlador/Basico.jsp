@@ -3,6 +3,7 @@
     Created on : 15 oct. 2020, 13:44:56
     Author     : rodrigo
 --%>
+<%@page import="java.util.Enumeration"%>
 <%@page import="java.util.LinkedList"%>
 <%@page import="Auxiliar.Funciones"%>
 <%@page import="Modelo.ConexionEstatica"%>
@@ -29,7 +30,10 @@
     
     if (accion == null) {
         if (request.getParameter(Constantes.A_CREAR_USUARIO) != null) {
-            accion = Constantes.A_CREAR_USUARIO;
+            accion = request.getParameter(Constantes.A_CREAR_USUARIO);
+            if(accion.equals(Constantes.A_AGREGAR)){
+                accion = Constantes.A_CREAR_USUARIO;
+            }
         } else if (request.getParameter(Constantes.A_RECUPERAR_USUARIO) != null) {
             accion = Constantes.A_RECUPERAR_USUARIO;
         } else if(request.getParameter(Constantes.A_AGREGAR_PREFERENCIAS)!=null){
@@ -37,7 +41,7 @@
         } else if(request.getParameter(Constantes.A_ENVIAR_MENSAJE)!=null){
             accion = Constantes.A_ENVIAR_MENSAJE;
         } else if(request.getParameter(Constantes.A_DEJAR_AMIGO)!=null){
-            accion =(String) session.getAttribute(Constantes.A_DEJAR_AMIGO);          
+            accion = Constantes.A_DEJAR_AMIGO;          
         }else if (request.getParameter(Constantes.A_EDITAR_MI_USUARIO) != null) {
             accion = Constantes.A_EDITAR_MI_USUARIO;
         }else if (request.getParameter(Constantes.A_MENSAJE_ENVIAR) != null) {
@@ -54,6 +58,8 @@
             accion = Constantes.A_ACEPTAR_AMISTAD;
         }else if (request.getParameter(Constantes.A_EDITAR_USUARIO) != null) {
             accion = request.getParameter(Constantes.A_EDITAR_USUARIO);
+        }else if (request.getParameter(Constantes.A_SALIR) != null) {
+            accion = request.getParameter(Constantes.A_SALIR);
         } else if(session.getAttribute(Constantes.S_ACCION)!=null){
             accion =(String) session.getAttribute(Constantes.S_ACCION);
             session.removeAttribute(Constantes.S_ACCION);
@@ -63,21 +69,29 @@
         }
     }
     
-    
+    System.out.println("ACCION == "+accion);
     if(accion.equals("Acceder")){
-    } else if(accion.equals(Constantes.A_SALIR) || accion.equals(Constantes.A_DEJAR_AMIGO) 
+    } else if(accion.equals(Constantes.A_DEJAR_AMIGO) 
             || accion.equals(Constantes.A_SOLICITAR_AMISTAD) || accion.equals(Constantes.A_ACEPTAR_AMISTAD)
-            || accion.equals(Constantes.A_EDITAR_MI_USUARIO)){
+            || accion.equals(Constantes.A_EDITAR_MI_USUARIO) || accion.equals("conectados")
+            || accion.equals("entrada") || accion.equals(Constantes.A_ENTRAR_USUARIO)){
         cargarDatos[0]=true;
     } else if(accion.equals(Constantes.A_AGREGAR_PREFERENCIAS)){
         cargarDatos[0]=true;
         cargarDatos[1]=true;
-    } else if(accion.equals(Constantes.A_ENTRAR_USUARIO)){
-        cargarDatos[0]=true;
-    } else if(accion.equals("conectados")){
-        cargarDatos[0]=true;
-    } else if(accion.equals("entrada")){
-        cargarDatos[0]=true;
+    } else if(accion.equals(Constantes.A_SALIR)){
+        LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
+        boolean encontrado = false;
+        for (int i = 0; !encontrado && i < usuariosConectados.size(); i++) {
+            Usuario u=usuariosConectados.get(i);
+            if(u.getId()==usuario.getId()){
+                encontrado=true;
+                usuariosConectados.remove(i);
+            }   
+        }
+        application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);
+        session.invalidate();
+        response.sendRedirect(Constantes.V_INDEX);
     }
 
     if(cargarDatos[0]){        
@@ -184,7 +198,7 @@
     } else if(accion.equals(Constantes.A_EDITAR_MI_USUARIO)){
         session.setAttribute(Constantes.S_USUARIO_FORMULARIO,usuario);
         session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_EDITAR_USUARIO);
-        redireccion=Constantes.V_FORMULARIO_USUARIO;                
+        redireccion=Constantes.A_EDITAR_MI_USUARIO;                
     } else if(accion.equals(Constantes.A_ENVIAR_MENSAJE)){
         if(request.getParameter("id")!=null){
             session.setAttribute(Constantes.S_MENSAJE_DESTINO, request.getParameter("id"));
@@ -223,12 +237,27 @@
         
     } else if(accion.equals("conectados")){
         LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
-        String[] usuarios = new String[usuariosConectados.size()-1];
+        LinkedList<Usuario> amigos = ConexionEstatica.obtenerAmigos(usuario);
+        LinkedList<Usuario> devolver = new LinkedList<>();
+        for (Usuario amigo : amigos) {
+                if(usuariosConectados.contains(amigo)){
+                    devolver.add(amigo);
+                }
+            }
+        String[] usuarios = new String[amigos.size()];
         int j=0;
-        for (int i = 0; i < usuariosConectados.size(); i++) {
-                Usuario get = usuariosConectados.get(i);
+        for (int i = 0; i < amigos.size(); i++) {
+                Usuario get = amigos.get(i);
                 if(get.getId()!=usuario.getId()){
-                    usuarios[j]="{\"id\":"+get.getId()+",\"nombre\":\""+get.getNombre()+" "+get.getApellidos()+"\"}";
+                    boolean conectado = false;
+                    for (Usuario usuariosConectado : usuariosConectados) {
+                            if(usuariosConectado.getId()==get.getId())conectado=true;
+                        }
+                    usuarios[j]="{"
+                            + "\"id\":"+get.getId()+","
+                            + "\"nombre\":\""+get.getNombre()+" "+get.getApellidos()+"\""
+                            + "\"conectado\":"+conectado
+                            + "}";
                     j++;
                 }
                 
@@ -238,6 +267,7 @@
     } else if(accion.equals(Constantes.A_DEJAR_AMIGO)){
         int id = Integer.parseInt(request.getParameter("id"));
         ConexionEstatica.eliminarAmistad(usuario.getId(),id);
+        redireccion = Constantes.V_ENTRADA_USER;        
     } else if(accion.equals(Constantes.A_CANCELAR)){
         redireccion = Constantes.V_ENTRADA_USER;
         
@@ -266,34 +296,21 @@
                                 session.setAttribute(Constantes.S_USUARIO, u);
                                 usuario = u;
                             }
-                            redireccion = Constantes.V_TABLA_CRUD;
+                            session.setAttribute(Constantes.S_MSG_INFO, "Datos guardados correctamente");
                         } else {
                             session.setAttribute(Constantes.S_MSG_INFO, "Error al modificar el usuario");
-                            redireccion = Constantes.V_FORMULARIO_USUARIO;
                         }            
 
                 } else {
                     session.setAttribute(Constantes.S_MSG_INFO, "No se puede modificar el usuario");
-                    redireccion = Constantes.V_FORMULARIO_USUARIO;                
                 }
+                redireccion = Constantes.V_FORMULARIO_USUARIO;
             } catch (Exception e) {
             }
         } else {
             session.setAttribute(Constantes.S_MSG_INFO, "Los password no son iguales");
             redireccion = Constantes.V_FORMULARIO_USUARIO;            
-        }
-    } else if(accion.equals(Constantes.A_SALIR)){
-        LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
-        boolean encontrado = false;
-        for (int i = 0; !encontrado && i < usuariosConectados.size(); i++) {
-            Usuario u=usuariosConectados.get(i);
-            if(u.getId()==usuario.getId()){
-                encontrado=true;
-                usuariosConectados.remove(i);
-            }   
-        }
-        application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);
-        
+        }      
     } else {
         if(usuario==null && session.getAttribute(Constantes.S_USUARIO)!=null){
             usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);

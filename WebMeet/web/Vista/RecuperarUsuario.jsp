@@ -20,7 +20,8 @@ como para editar las existentes
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
         <script src="<%=Constantes.J_FORMULARIOUSUARIO%>"></script>
-        <script src="<%=Constantes.J_OWNCAPTCHA%>"></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     </head>
     <%
         %>
@@ -40,19 +41,18 @@ como para editar las existentes
                             </div>
                             <input class="col-m-8 col-8" campo type="email" name="email" required maxlength="500"/>
                             <!-- CAPTCHA -->
-                            <div class="col-m12 col-12">
-                                <span id="error_captcha" aria-live="assertive"></span>
-                                <canvas id="captcha"></canvas>  
-                                <input campo type="text" id="captchaInput"/>
-                                <button type="button" class="rounded" onclick="refrescarCaptcha('captcha');"><i class="fas fa-redo-alt"></i></button>
+                            <div class="col-m6 col-6">
+                                <div class="g-recaptcha" data-sitekey="6LeoQtoZAAAAAMiZi7FOGwWAYUUMeAD9XjMP94B8"></div>
                             </div>
+                        </div>
+                        <div class="row">
                         </div>
                         <div class="row botones">
                             <div class="col-m-2 col-2">
                                 <input type="submit" name="<%=Constantes.A_RECUPERAR_USUARIO%>" value="Recuperar">
                             </div>
                             <div class="col-m-2 col-2">
-                                <input type="submit" value="Cancelar">
+                                <input type="submit" name="<%=Constantes.A_SALIR%>" value="Cancelar">
                             </div>
                         </div>
                     </form>

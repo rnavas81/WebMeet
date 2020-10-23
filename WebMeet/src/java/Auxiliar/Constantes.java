@@ -132,7 +132,7 @@ public class Constantes {
     public static final String M_USUARIOS = "users";
     public static final String M_ADMINISTRADORES = "admin";
 
-    public static final int ROL_USER = 1;
-    public static final int ROL_ADMIN = 2;
+    public static final int ROL_ADMIN = 1;
+    public static final int ROL_USER = 2;
 
 }
