@@ -44,18 +44,22 @@ const mensajes = {
         tooLong:'Como máximo 500 caracteres'
     }
 };
+var validarCaptcha=false;
 
-validarFormulario = () => {
+validarFormulario = (mensaje=null) => {    
+    if(mensaje!==null){
+        crearPopUp({text:mensaje});
+    }
     const form = document.getElementById('formularioUsuario');
     let elementos = {};
-    refrescarCaptcha('captcha');
     for(name in mensajes){
         if(document.getElementsByName(name).length>0) {
             elementos[name] = {
                 input: document.getElementsByName(name)[0],
                 error: document.getElementsByClassName(`error_msg ${name}`)[0]
             };
-            elementos[name].input.addEventListener('input:blur', function (event) {
+            elementos[name].input.addEventListener('blur', function (event) {
+                console.log(name);
                 // Cada vez que el usuario escribe algo, verificamos si
                 // los campos del formulario son válidos.
 
@@ -74,6 +78,13 @@ validarFormulario = () => {
         if(event.submitter.value === 'Cancelar'){
             return true;
         }
+        if(event.submitter.value === 'Preferencias'){
+            if(confirm("Si continua perderá los cambios no guardados,\n¿Desea continuar?")){
+                return true;
+            } else {
+                event.preventDefault();
+            }
+        }
         var valido = true;
         for (var name in elementos) {
             if (!elementos[name].input.validity.valid) {
@@ -83,19 +94,18 @@ validarFormulario = () => {
             } else {
                 elementos[name].error.innerHTML = ''; // Restablece el contenido del mensaje
             }
-            if(name === 'password2' && elementos[name].input.value !== elementos.password.input.value 
-                    && elementos[name].input.value !== elementos.password.input.value){
+            if(name === 'password2' 
+                    && elementos[name].input.value !== elementos.password.input.value ){
                 elementos[name].error.textContent = mensajes[name].match;
                 valido = false;
             }
         }
-        if(!validarCaptchaCalculo('captchaInput','captcha')){
-            valido = false;
-            document.getElementById("error_captcha").textContent="Comprobación no valida";
-        } else {
-            document.getElementById("error_captcha").textContent="";            
+        if(!validarCaptcha){
+            valido=false;
+            crearPopUp({text:"Valida el captcha"});
         }
         if(!valido){
+            window.scrollTo(0,0);
             event.preventDefault();
         }
     });
@@ -116,5 +126,7 @@ validarFormulario = () => {
 
 
 };
-
-
+verifyCallback = value => {
+    console.log("verifyCallback",value);
+    validarCaptcha = value;
+};

@@ -198,41 +198,60 @@ public class Consultas {
         return "SELECT " +getCampos(CAMPOS_USUARIO, "u")
                 + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=u.id) AS roles "
                 + "FROM "+Constantes.T_USUARIOS_AMISTADES+" a " 
-                + "LEFT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=IF(a.usuario1= ? ,a.usuario2,a.usuario1) "
-                + "WHERE (a.usuario1= ? || a.usuario2= ?) AND a.aceptada=1";
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=IF(a.usuario1= ? ,a.usuario2,a.usuario1) AND u.activo=1 "
+                + "WHERE (a.usuario1= ? OR a.usuario2= ?) AND a.aceptada=1";
     }
     public static String getAmigosPendientesById() {
         return "SELECT " +getCampos(CAMPOS_USUARIO, "u")
                 + ",(SELECT GROUP_CONCAT(r.rol) FROM "+Constantes.T_USUARIOS_ROLES+" r WHERE r.usuario=u.id) AS roles "
                 + "FROM "+Constantes.T_USUARIOS_AMISTADES+" a " 
-                + "LEFT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=IF(a.usuario1= ? ,a.usuario2,a.usuario1) "
-                + "WHERE (a.usuario1= ? || a.usuario2= ?) AND a.aceptada=0";
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+ " u ON u.id=a.usuario1 AND u.activo=1 "
+                + "WHERE a.usuario2= ? AND a.aceptada=0";
     }
     public static String getNoAmigosById() {
         return "SELECT " +getCampos(CAMPOS_USUARIO, "u")+" "
                 + "FROM "+Constantes.T_USUARIOS+" u "
                 + "RIGHT JOIN "+Constantes.T_USUARIOS_ROLES+" r ON r.usuario=u.id AND r.rol="+Constantes.ROL_USER+" "
-                + "WHERE u.id!= ? AND u.id NOT IN("
-                    + "SELECT usuario1 AS usuario FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE usuario2=? " 
+                + "WHERE u.id!= ? AND u.activo=1 AND u.id NOT IN("
+                    + "SELECT usuario1 AS usuario FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE usuario2=? "
                     + "UNION "
-                    + "SELECT usuario2 AS usuario FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE usuario1=?);";
+                    + "SELECT usuario2 AS usuario FROM "+Constantes.T_USUARIOS_AMISTADES+" WHERE usuario1=? AND aceptada=1);";
     }
 
     public static String getUsuarioMensajesRecibidos() {
-        return "SELECT "+getCampos(CAMPOS_MENSAJE,"m")+", CONCAT(u.nombre,' ',u.apellidos) AS remitenteNombre "
+        /*
+        SELECT m.id,m.remitente,m.destinatario,m.titulo,m.mensaje,m.fecha,m.leido,
+        (r.nombre,' ',r.apellidos) AS remitenteNombre ,
+        (d.nombre,' ',d.apellidos) AS destinatarioNombre 
+        FROM Mensajes m 
+        LEFT JOIN Usuarios r ON r.id=m.remitente AND r.activo=1 
+        LEFT JOIN Usuarios d ON d.id=m.destinatario AND d.activo=1 
+        WHERE m.destinatario=3 ORDER BY fecha DESC;
+        */
+        return "SELECT "+getCampos(CAMPOS_MENSAJE, "m")
+                + ",CONCAT(r.nombre,' ',r.apellidos) AS remitenteNombre "
+                + ",CONCAT(d.nombre,' ',d.apellidos) AS destinatarioNombre "
                 + "FROM "+Constantes.T_MENSAJES+" m "
-                + "LEFT JOIN "+Constantes.T_USUARIOS+" u ON u.id=m.remitente "
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+" r ON r.id=m.remitente AND r.activo=1 "
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+" d ON d.id=m.destinatario AND d.activo=1 "
                 + "WHERE m.destinatario=? ORDER BY fecha DESC;";
     }
     public static String getUsuarioMensajesEnviados() {
-        return "SELECT "+getCampos(CAMPOS_MENSAJE,"m")+", CONCAT(u.nombre,' ',u.apellidos) AS destinatarioNombre "
+        return "SELECT "+getCampos(CAMPOS_MENSAJE, "m")
+                + ",CONCAT(r.nombre,' ',r.apellidos) AS remitenteNombre "
+                + ",CONCAT(d.nombre,' ',d.apellidos) AS destinatarioNombre "
                 + "FROM "+Constantes.T_MENSAJES+" m "
-                + "LEFT JOIN "+Constantes.T_USUARIOS+" u ON u.id=m.destinatario "
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+" r ON r.id=m.remitente AND r.activo=1 "
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+" d ON d.id=m.destinatario AND d.activo=1 "
                 + "WHERE m.remitente=? ORDER BY fecha DESC;";
     }
     public static String getMensajeById(){
-        return "SELECT "+getCampos(CAMPOS_MENSAJE, "m")+ " "
+        return "SELECT "+getCampos(CAMPOS_MENSAJE, "m")
+                + ",CONCAT(r.nombre,' ',r.apellidos) AS remitenteNombre "
+                + ",CONCAT(d.nombre,' ',d.apellidos) AS destinatarioNombre "
                 + "FROM "+Constantes.T_MENSAJES+" m "
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+" r ON r.id=m.remitente AND r.activo=1 "
+                + "RIGHT JOIN "+Constantes.T_USUARIOS+" d ON d.id=m.destinatario AND d.activo=1 "
                 + "WHERE m.id = ?";
     }
 

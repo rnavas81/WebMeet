@@ -53,13 +53,15 @@
             accion = Constantes.A_CRUD_AGREGAR;
         }else if (request.getParameter(Constantes.A_SALIR) != null) {
             accion = Constantes.A_SALIR;
+        }else if (request.getParameter(Constantes.A_PREFERENCIAS_FORMULARIO) != null) {
+            accion = Constantes.A_PREFERENCIAS_FORMULARIO;
         } else {
             accion = "";
             redireccion = Constantes.V_INDEX;
         }
     }
+    System.out.println("Probando "+accion);
     
-    System.out.println("Accion "+accion);
     if(accion.equals(Constantes.A_SALIR)){
         cargarDatos[0]=true;
     }
@@ -167,6 +169,7 @@
         }
         
     } else if(accion.equals(Constantes.A_MODIFICAR)){
+        System.out.println("Entrando");
         int id;
         String password = request.getParameter("password");
         String password2 = request.getParameter("password2");
@@ -184,9 +187,11 @@
                     u.setFechaNacimiento(request.getParameter("fechaNacimiento"));
                     u.setPais(request.getParameter("pais"));
                     u.setCiudad(request.getParameter("ciudad"));
+                    u.setRoles(new LinkedList<>());
                     try {
                         String[]vRoles = request.getParameterValues("roles");
                         for(String rol:vRoles){
+                            System.out.println("ROL: "+rol);
                             u.setRol(Integer.parseInt(rol));
                         }                
                     } catch (Exception e) {
@@ -198,34 +203,30 @@
                                 session.setAttribute(Constantes.S_USUARIO, u);
                                 usuario = u;
                             }
-                            redireccion = Constantes.V_TABLA_CRUD;
+                            session.setAttribute(Constantes.S_MSG_INFO, "Datos guardados correctamente");
                         } else {
                             session.setAttribute(Constantes.S_MSG_INFO, "Error al modificar el usuario");
-                            redireccion = Constantes.V_FORMULARIO_USUARIO;
                         }            
 
                 } else {
                     session.setAttribute(Constantes.S_MSG_INFO, "No se puede modificar el usuario");
-                    redireccion = Constantes.V_FORMULARIO_USUARIO;                
                 }
             } catch (Exception e) {
             }
         } else {
             session.setAttribute(Constantes.S_MSG_INFO, "Los password no son iguales");
-            redireccion = Constantes.V_FORMULARIO_USUARIO;            
         }
+        redireccion = Constantes.V_FORMULARIO_USUARIO;        
+        System.out.println("Saliendo");
         
     } else if(accion.equals(Constantes.A_SALIR)){
-        LinkedList<Usuario> usuariosConectados = (LinkedList<Usuario>)application.getAttribute(Constantes.AP_USUARIOS);
-        boolean encontrado = false;
-        for (int i = 0; i < usuariosConectados.size() && !encontrado; i++) {
-            Usuario u=usuariosConectados.get(i);
-            if(u.getId()==usuario.getId()){
-                encontrado=true;
-                usuariosConectados.remove(i);
-            }   
-        }
-        application.setAttribute(Constantes.AP_USUARIOS, usuariosConectados);
+        session.setAttribute(Constantes.S_ACCION, Constantes.A_SALIR);
+        redireccion = Constantes.C_BASICO;
+    } else if(accion.equals(Constantes.A_PREFERENCIAS_FORMULARIO)){
+        int id = Integer.parseInt(request.getParameter("id"));
+        Usuario u = ConexionEstatica.obtenerUsuarioById(id);
+        session.setAttribute(Constantes.S_USUARIO_FORMULARIO, u);
+        redireccion = Constantes.V_FORMULARIO_PREFERENCIAS;
     } else {
         if(usuario==null && session.getAttribute(Constantes.S_USUARIO)!=null){
             usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);

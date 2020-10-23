@@ -18,7 +18,10 @@ const mensajes = {
     adjunto:{
     }
 };
-window.onload = () => {
+mensajeOnload = (mensaje=null) => {    
+    if(mensaje!==null){
+        crearPopUp({text:mensaje});
+    }
     
     var uploadField = document.querySelector("input[type=file]");
     console.log(uploadField);

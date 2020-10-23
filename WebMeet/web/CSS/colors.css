@@ -1,0 +1,30 @@
+/* 
+    Created on : 23 oct. 2020, 18:34:18
+    Author     : rodrigo
+    Colores para la aplicación
+*/
+
+:root {
+    --background-color: rgb(184 199 216);
+    --text-color:   #3f4040;
+    --menu-color: rgb(210 231 255);
+    --menu-text-color:rgb(219, 221, 223);
+    --menu-text-color-hover:rgb(251, 253, 255);
+    --menu-logo-border:rgb(0, 162, 255);
+    --menu-logo-background:rgb(126, 177, 223);
+    --menu-icon:whitesmoke;
+    --button-background: #539ac3;
+    --button-color: #2b2b2b;
+    --button-shadow-color: #e8a2cd;
+    --input-border-color :#c3bdbd;
+    --main-color:rgb(6, 51, 94);
+    --fila-odd: whitesmoke;
+    --fila-even: cornsilk;
+    --tabla-cabecera: #617388;
+    --tabla-cabecera-text: #b8c7d8;
+    --fila-even-text: #282f38;
+    --fila-odd-text: #282f38;
+    --usuario-conectado: #62bf62;
+    --pop-background: #00968887;
+    --pop-border: #009688;
+}

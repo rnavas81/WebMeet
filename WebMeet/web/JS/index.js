@@ -20,7 +20,10 @@ const mensajes = {
     }
 };
 
-validarFormulario = (ponerCaptcha=false) => {
+validarFormulario = (ponerCaptcha=false,mensaje=null) => {    
+    if(mensaje!==null){
+        crearPopUp({text:mensaje});
+    }
     const form = document.getElementById('formIndex');
     let elementos = {};    
     if(ponerCaptcha){
@@ -84,7 +87,6 @@ validarFormulario = (ponerCaptcha=false) => {
             }
         }
     }
-
 
 };
 

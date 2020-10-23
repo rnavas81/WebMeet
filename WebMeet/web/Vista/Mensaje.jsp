@@ -21,11 +21,19 @@ como para editar las existentes
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=Constantes .APP_NAME%></title>
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
+        <link rel="stylesheet" href="<%=Constantes.CSS_COLORES%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
+        <link rel="stylesheet" href="<%=Constantes.CSS_POPUP%>"/>
+        <script src="<%=Constantes.J_POPUP%>"></script>
         <script src="<%=Constantes.J_MENSAJE%>"></script>
     </head>
     <%
+        String msg_info = "";
+        if(session.getAttribute(Constantes.S_MSG_INFO)!=null){
+            msg_info = (String)session.getAttribute(Constantes.S_MSG_INFO);
+            session.removeAttribute(Constantes.S_MSG_INFO);
+        }
         if(session.getAttribute(Constantes.S_USUARIO)==null){
             session.setAttribute(Constantes.S_ACCION, Constantes.A_SALIR);
             response.sendRedirect(Constantes.C_BASICO);
@@ -52,7 +60,7 @@ como para editar las existentes
             editable = true;
         }
         %>
-    <body>
+    <body onload="mensajeOnload(<%=msg_info.isBlank()?null:"'"+msg_info+"'"%>)">
         <header>  
             <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
         </header>

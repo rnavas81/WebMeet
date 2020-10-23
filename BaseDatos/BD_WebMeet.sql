@@ -30,8 +30,8 @@ CREATE TABLE WebMeet.Auxiliar (
 );
 -- Datos iniciales del sistema
 INSERT INTO WebMeet.Auxiliar (`tipo`,`nombre`,`descripcion`) VALUES
-(1,'Usuario','Rol para usuario básico del sistema'),
 (1,'Administrador','Rol para usuario administrador del sistema'),
+(1,'Usuario','Rol para usuario básico del sistema'),
 (2,'Relación seria','indicarán si su finalidad es una relación seria o esporádica'),
 (2,'Deportivos','valor numérico que indica, de 0 a 100, su gusto por los deportes'),
 (2,'Artísticos','valor que indica su inquietud artística'),
