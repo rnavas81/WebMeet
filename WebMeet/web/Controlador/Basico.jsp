@@ -56,6 +56,8 @@
             accion = Constantes.A_SOLICITAR_AMISTAD;
         }else if (request.getParameter(Constantes.A_ACEPTAR_AMISTAD) != null) {
             accion = Constantes.A_ACEPTAR_AMISTAD;
+        }else if (request.getParameter(Constantes.A_PREFERENCIAS_FORMULARIO) != null) {
+            accion = Constantes.A_PREFERENCIAS_FORMULARIO;
         }else if (request.getParameter(Constantes.A_EDITAR_USUARIO) != null) {
             accion = request.getParameter(Constantes.A_EDITAR_USUARIO);
         }else if (request.getParameter(Constantes.A_SALIR) != null) {
@@ -197,8 +199,8 @@
         redireccion = Constantes.V_ENTRADA_USER;
     } else if(accion.equals(Constantes.A_EDITAR_MI_USUARIO)){
         session.setAttribute(Constantes.S_USUARIO_FORMULARIO,usuario);
-        session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_EDITAR_USUARIO);
-        redireccion=Constantes.A_EDITAR_MI_USUARIO;                
+        session.setAttribute(Constantes.S_ACCION_FORMULARIO,Constantes.A_EDITAR_USUARIO_BASICO);
+        redireccion=Constantes.V_FORMULARIO_USUARIO;                
     } else if(accion.equals(Constantes.A_ENVIAR_MENSAJE)){
         if(request.getParameter("id")!=null){
             session.setAttribute(Constantes.S_MENSAJE_DESTINO, request.getParameter("id"));
@@ -271,6 +273,11 @@
     } else if(accion.equals(Constantes.A_CANCELAR)){
         redireccion = Constantes.V_ENTRADA_USER;
         
+    } else if(accion.equals(Constantes.A_PREFERENCIAS_FORMULARIO)){
+        int id = Integer.parseInt(request.getParameter("id"));
+        Usuario u = ConexionEstatica.obtenerUsuarioById(id);
+        session.setAttribute(Constantes.S_USUARIO_FORMULARIO, u);
+        redireccion =Constantes.V_FORMULARIO_PREFERENCIAS;
     } else if(accion.equals(Constantes.A_MODIFICAR)){
         int id;
         String password = request.getParameter("password");

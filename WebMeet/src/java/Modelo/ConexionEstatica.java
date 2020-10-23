@@ -293,12 +293,10 @@ public class ConexionEstatica {
             if(hecho){
                 usuario = existeUsuario(usuario.getEmail());
                 for(int rol:roles){
-                    System.out.println(rol);
                     try {
                         Sentencia_preparada = Conex.prepareStatement(Consultas.insertUsuarioRol());
                         Sentencia_preparada.setInt(1, usuario.getId());
                         Sentencia_preparada.setInt(2, rol);
-                        System.out.println(Sentencia_preparada);
                         ConexionEstatica.Sentencia_preparada.executeUpdate();
                     } catch (Exception e) {
                         System.err.println("agregarUsuarioRol[Error] "+e.getMessage());
@@ -441,25 +439,20 @@ public class ConexionEstatica {
             }
             hecho = ConexionEstatica.Sentencia_preparada.executeUpdate()>0;
             if(hecho){
-                System.out.println("ROLES");
                 try {
                     Sentencia_preparada = Conex.prepareStatement(Consultas.deleteUsuarioRolesById());
                     Sentencia_preparada.setInt(1, usuario.getId());
-                    System.out.println(Sentencia_preparada);
                     ConexionEstatica.Sentencia_preparada.executeUpdate();
                     for (Integer role : usuario.getRoles()) {
                         Sentencia_preparada = Conex.prepareStatement(Consultas.insertUsuarioRol());
                         Sentencia_preparada.setInt(1, usuario.getId());
                         Sentencia_preparada.setInt(2, role);
-                        System.out.println(Sentencia_preparada);
                         ConexionEstatica.Sentencia_preparada.executeUpdate();
                     }                    
                 } catch (Exception e) {
                     System.err.println("actualizarUsuarioRoles[Error] "+e.getMessage());
                 }
-                System.out.println("FIN ROLES");
-            }
-            
+            }            
         } catch (SQLException ex) {
             System.err.println("actualizarUsuario[Error] "+ex.getMessage());
             hecho = false;
@@ -579,7 +572,6 @@ public class ConexionEstatica {
             Sentencia_preparada.setInt(1, usuario.getId());
             Sentencia_preparada.setInt(2, usuario.getId());
             Sentencia_preparada.setInt(3, usuario.getId());
-            System.out.println(Sentencia_preparada);
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             Usuario element;
             while (Conj_Registros.next()) {
@@ -675,7 +667,6 @@ public class ConexionEstatica {
             }
             Sentencia_preparada = Conex.prepareStatement(Consultas.getMensajeById());
             Sentencia_preparada.setInt(1, id);
-            System.out.println(Sentencia_preparada);
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             if(Conj_Registros.next()) {
                 mensaje = recogerDatosMensaje();
@@ -698,7 +689,6 @@ public class ConexionEstatica {
             }
             Sentencia_preparada = Conex.prepareStatement(Consultas.getUsuarioMensajesRecibidos());
             Sentencia_preparada.setInt(1, usuario.getId());
-            System.out.println(Sentencia_preparada);
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             Mensaje element;
             while (Conj_Registros.next()) {
@@ -724,7 +714,6 @@ public class ConexionEstatica {
             }
             Sentencia_preparada = Conex.prepareStatement(Consultas.getUsuarioMensajesEnviados());
             Sentencia_preparada.setInt(1, usuario.getId());
-            System.out.println(Sentencia_preparada);
             ConexionEstatica.Conj_Registros = ConexionEstatica.Sentencia_preparada.executeQuery();
             Mensaje element;
             while (Conj_Registros.next()) {

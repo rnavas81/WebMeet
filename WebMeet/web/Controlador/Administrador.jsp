@@ -53,11 +53,14 @@
             accion = Constantes.A_CRUD_AGREGAR;
         }else if (request.getParameter(Constantes.A_SALIR) != null) {
             accion = Constantes.A_SALIR;
+        }else if (request.getParameter(Constantes.A_PREFERENCIAS_FORMULARIO) != null) {
+            accion = Constantes.A_PREFERENCIAS_FORMULARIO;
         } else {
             accion = "";
             redireccion = Constantes.V_INDEX;
         }
     }
+    System.out.println("Probando "+accion);
     
     if(accion.equals(Constantes.A_SALIR)){
         cargarDatos[0]=true;
@@ -219,6 +222,11 @@
     } else if(accion.equals(Constantes.A_SALIR)){
         session.setAttribute(Constantes.S_ACCION, Constantes.A_SALIR);
         redireccion = Constantes.C_BASICO;
+    } else if(accion.equals(Constantes.A_PREFERENCIAS_FORMULARIO)){
+        int id = Integer.parseInt(request.getParameter("id"));
+        Usuario u = ConexionEstatica.obtenerUsuarioById(id);
+        session.setAttribute(Constantes.S_USUARIO_FORMULARIO, u);
+        redireccion = Constantes.V_FORMULARIO_PREFERENCIAS;
     } else {
         if(usuario==null && session.getAttribute(Constantes.S_USUARIO)!=null){
             usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);

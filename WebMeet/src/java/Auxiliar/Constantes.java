@@ -57,11 +57,16 @@ public class Constantes {
     private static final String JS_PATH = APP_PATH + "/JS";
     private static final String RECURSOS_PATH = APP_PATH + "/Recursos";
     private static final String VISTAS_PATH = APP_PATH + "/Vista";
+    private static final String COMPONENTES_PATH = APP_PATH + "/Componente";
     private static final String ROOT_FILES = "/home/rodrigo/particionLinux/DWEBS/Desafio1/WebMeet/WebMeet/web";
 
     //CSS
     public static final String CSS_GLOBAL = CSS_PATH + "/global.css";
+    public static final String CSS_CABECERA = CSS_PATH + "/header.css";
+    public static final String CSS_COLORES = CSS_PATH + "/colors.css";
+    public static final String CSS_TOOLTIP = CSS_PATH + "/tooltip.css";
     public static final String CSS_FONTAWESOME = CSS_PATH + "/fontawesome/all.min.css";
+    public static final String CSS_POPUP = CSS_PATH + "/PopUp.css";
 
     //VISTAS
     public static final String V_INDEX = APP_PATH + "/index.jsp";
@@ -87,46 +92,52 @@ public class Constantes {
     public static final String J_FORM = JS_PATH + "/Formularios.js";
     public static final String J_INDEX = JS_PATH + "/index.js";
     public static final String J_OWNCAPTCHA = JS_PATH + "/OwnCaptcha.js";
+    public static final String J_POPUP = JS_PATH + "/PopUp.js";
     public static final String J_FORMULARIOUSUARIO = JS_PATH + "/FormularioUsuario.js";
     public static final String J_FORMULARIOPREFERENCIAS = JS_PATH + "/FormularioPreferencias.js";
     public static final String J_ENTRADAUSUARIO = JS_PATH + "/EntradaUsuario.js";
     public static final String J_MENSAJE = JS_PATH + "/Mensaje.js";
 
+    //COMPONENTES
+    public static final String CM_CABECERA = COMPONENTES_PATH + "/Cabecera.jsp";
+            
     //ACCIONES
-    public static final String A_CREAR_USUARIO = "nuevoUsuario";
+    public static final String A_ACEPTAR_AMISTAD = "acpetarAmistad";
     public static final String A_AGREGAR_USUARIO = "agregarUsuario";
-    public static final String A_EDITAR_USUARIO = "editarUsuario";
-    public static final String A_EDITAR_USUARIO_BASICO = "editarUsuarioBasico";
-    public static final String A_EDITAR_MI_USUARIO = "editarMiUsuario";
-    public static final String A_RECUPERAR_USUARIO = "recuperarUsuario";
-    public static final String A_TABLA_USUARIOS = "tablaUsuarios";
-    public static final String A_TABLA_ADMINISTRADORES = "tablaAdministradores";
-    public static final String A_PANEL = "panelUsuario";
-    public static final String A_SALIR = "salir";
+    public static final String A_AGREGAR = "Agregar";
+    public static final String A_AGREGAR_PREFERENCIAS = "preferenciasUsuario";
+    public static final String A_CANCELAR = "Cancelar";
+    public static final String A_CREAR_USUARIO = "nuevoUsuario";
     public static final String A_CRUD_ACTIVAR = "usuarioActivar";
     public static final String A_CRUD_ELIMINAR = "usuarioEliminar";
     public static final String A_CRUD_EDITAR = "usuarioEditar";
     public static final String A_CRUD_AGREGAR = "crudAgregar";
-    public static final String A_CANCELAR = "Cancelar";
-    public static final String A_MODIFICAR = "Modificar";
-    public static final String A_AGREGAR = "Agregar";
-    public static final String A_ENTRAR_USUARIO = "entrarUsuario";
-    public static final String A_AGREGAR_PREFERENCIAS = "preferenciasUsuario";
-    public static final String A_ENVIAR_MENSAJE = "enviarMensaje";
     public static final String A_DEJAR_AMIGO = "dejarAmigo";
-    public static final String A_MENSAJE_ENVIAR = "mensajeEnviar";
-    public static final String A_MENSAJE_CANCELAR = "mensajeCancelar";
-    public static final String A_MENSAJE_LEER = "mensajeLeer";
-    public static final String A_MENSAJE_BORRAR = "mensajeBorrar";
-    public static final String A_LEER_MENSAJE = "leerMensaje";
+    public static final String A_EDITAR_MI_USUARIO = "editarMiUsuario";
+    public static final String A_EDITAR_USUARIO = "editarUsuario";
+    public static final String A_EDITAR_USUARIO_BASICO = "editarUsuarioBasico";
+    public static final String A_ENVIAR_MENSAJE = "enviarMensaje";
+    public static final String A_ENTRAR_USUARIO = "entrarUsuario";
     public static final String A_ESCRIBIR_MENSAJE = "escribirMensaje";
-    public static final String A_SOLICITAR_AMISTAD = "solicitarAmistad";
-    public static final String A_ACEPTAR_AMISTAD = "acpetarAmistad";
+    public static final String A_LEER_MENSAJE = "leerMensaje";
+    public static final String A_MENSAJE_BORRAR = "mensajeBorrar";
+    public static final String A_MENSAJE_CANCELAR = "mensajeCancelar";
+    public static final String A_MENSAJE_ENVIAR = "mensajeEnviar";
+    public static final String A_MENSAJE_LEER = "mensajeLeer";
+    public static final String A_MODIFICAR = "Modificar";
+    public static final String A_PANEL = "panelUsuario";
+    public static final String A_PREFERENCIAS_FORMULARIO = "preferenciasFormulario";
     public static final String A_RECHAZAR_AMISTAD = "rechazarAmistad";
+    public static final String A_RECUPERAR_USUARIO = "recuperarUsuario";
+    public static final String A_SALIR = "salir";
+    public static final String A_TABLA_USUARIOS = "tablaUsuarios";
+    public static final String A_TABLA_ADMINISTRADORES = "tablaAdministradores";
+    public static final String A_SOLICITAR_AMISTAD = "solicitarAmistad";
 
     //ARCHIVOS SUBIDOS
-    public static final String SUBIDOS_DIR = ROOT_FILES + "/Subidos";
+    public static final String SUBIDOS_DIR = "Subidos";
     public static final String SUBIDOS_PATH = APP_PATH + "/Subidos";
+    
 
     //VALORES
     public static final String M_USUARIOS = "users";

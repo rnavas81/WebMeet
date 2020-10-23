@@ -20,18 +20,17 @@ como para editar las existentes
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=Constantes .APP_NAME%></title>
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
+        <link rel="stylesheet" href="<%=Constantes.CSS_COLORES%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
+        <link rel="stylesheet" href="<%=Constantes.CSS_POPUP%>"/>
+        <script src="<%=Constantes.J_POPUP%>"></script>
         <script src="<%=Constantes.J_FORMULARIOUSUARIO%>"></script>
-        <script src="https://www.google.com/recaptcha/api.js?onload=validarFormulario&render=explicit"
-            async defer>
-        </script>
-
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     </head>
     <%
         Usuario usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
-        String msg_info = "";
         String accion = (String)session.getAttribute(Constantes.S_ACCION_FORMULARIO);
         String boton_accion = Constantes.A_AGREGAR;
         String controlador = Constantes.C_BASICO;
@@ -41,6 +40,7 @@ como para editar las existentes
         LinkedList<Auxiliar> roles = new LinkedList<>();
         LinkedList<Auxiliar> generos = new LinkedList<>();
         /////////////////////////////////////////////////////////////
+        String msg_info = "";
         if(session.getAttribute(Constantes.S_MSG_INFO)!=null){
             msg_info = (String)session.getAttribute(Constantes.S_MSG_INFO);
             session.removeAttribute(Constantes.S_MSG_INFO);
@@ -89,19 +89,12 @@ como para editar las existentes
             }
         }
         %>
-    <body>
-        <header>  
-            <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
-        </header>
+    <body onload="validarFormulario(<%=msg_info.isBlank()?null:"'"+msg_info+"'"%>)">
+        <jsp:include page="../Componente/Cabecera.jsp"></jsp:include>
         <main class="formulario usuario">
-            <!-- MENSAJE DE INFO-->
-            <div class="popup">
-                <span class="col-m-12 col-12"><%=msg_info%></span>
-            </div>
             <div class="row">
                 <div class="col-m-12 col-12">
                     <form id="formularioUsuario"  action="<%=controlador%>" method="POST" novalidate>
-
                         <div class="row">
                             <% if(expandido){%>
                             <!-- ROLES -->
@@ -206,14 +199,14 @@ como para editar las existentes
                             <% } %>
                             <!-- CAPTCHA -->
                             <div class="col-m-2 col-2">
-                                <div id="html_captcha"></div>
+                                <div class="g-recaptcha" id="rcaptcha" data-sitekey="6LeoQtoZAAAAAMiZi7FOGwWAYUUMeAD9XjMP94B8" data-callback="verifyCallback"></div>
                             </div>
 
                         </div>
                         <div class="row botones">
                             <% if(accion==Constantes.A_EDITAR_USUARIO){%>
                             <div class="col-m-2 col-2">
-                                <input type="submit" name="<%=Constantes.A_AGREGAR_PREFERENCIAS%>" value="Preferencias">
+                                <input type="submit" name="<%=Constantes.A_PREFERENCIAS_FORMULARIO%>" value="Preferencias">
                             </div>
                             <% }%>
                             <div class="col-m-2 col-2">

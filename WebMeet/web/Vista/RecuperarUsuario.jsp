@@ -17,8 +17,11 @@ como para editar las existentes
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=Constantes .APP_NAME%></title>
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
+        <link rel="stylesheet" href="<%=Constantes.CSS_COLORES%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
+        <link rel="stylesheet" href="<%=Constantes.CSS_POPUP%>"/>
+        <script src="<%=Constantes.J_POPUP%>"></script>
         <script src="<%=Constantes.J_FORMULARIOUSUARIO%>"></script>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
@@ -26,9 +29,7 @@ como para editar las existentes
     <%
         %>
     <body onload="validarFormulario()">
-        <header>  
-            <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
-        </header>
+        <jsp:include page="../Componente/Cabecera.jsp"></jsp:include>
         <main class="formulario usuario">
             <div class="row">
                 <div class="col-m-12 col-12">

@@ -9,6 +9,8 @@ import Modelo.Preferencia;
 import Modelo.Usuario;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -72,29 +74,47 @@ public class Funciones {
         }
         return generatedHash;
     }
+    /**
+     * Ordena la lista de no amigos en función de la 
+     * diferencia total entre los valores de cada preferencia
+     * @param usuario
+     * @param otros
+     * @return lista ordenada
+     */
     public static LinkedList<Usuario> calcularCompatibilidad(Usuario usuario,LinkedList<Usuario> otros){
-        LinkedList<Usuario> lista=new LinkedList<>();
+        LinkedList<Usuario> lista = new LinkedList<>();
+        HashMap<Integer,HashMap<Integer,Integer>> temp = new HashMap<>();
         for (Usuario otro : otros) {
+            HashMap<Integer,Integer> valores = new HashMap<>();
             int total = 0;
             for (Preferencia preferencia : otro.getPreferencias()) {
-                Preferencia pu = usuario.getPreferenciaById(preferencia.getId());
-                preferencia.setValor(pu.getValor() - preferencia.getValor());
-                total += preferencia.getValor();
+                int valorUsuario=usuario.getPreferenciaValorById(preferencia.getIdPreferencia());
+                int valorOtro = preferencia.getValor();
+                preferencia.setValor(valorUsuario - valorOtro);
+                valores.put(preferencia.getIdPreferencia(), valorUsuario-preferencia.getValor());
+                total += valores.get(preferencia.getIdPreferencia());
+                preferencia.setValor(valorUsuario - valorOtro);
+                otro.updatePreferencia(preferencia);
             }
-            otro.setTotal(total);
+            valores.put(0,total);
+            temp.put(otro.getId(), valores);
             if(lista.isEmpty()){
                 lista.add(otro);
             } else {
                 boolean puesto=false;
-                for (int i = 0; !puesto && i < lista.size(); i++) {
+                for (int i = 0;!puesto && i < lista.size(); i++) {
                     Usuario get = lista.get(i);
-                    if(get.getTotal()>otro.getTotal()){
-                        lista.add(i, otro);
+                    if(temp.get(get.getId()).get(0)<valores.get(0)){
+                        lista.add(i,otro);
                         puesto=true;
                     }
+                } 
+                if(!puesto){
+                    lista.add(otro);
                 }
             }
         }
+        
         return lista;
     }
  

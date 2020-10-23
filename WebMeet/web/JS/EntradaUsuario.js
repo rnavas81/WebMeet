@@ -5,7 +5,10 @@
  */
 
 
-window.onload = () => {
+onloadEntradaUsuario = (mensaje=null) => {    
+    if(mensaje!==null){
+        crearPopUp({text:mensaje});
+    }
     comprobarConectados = () => {
         var amigos = document.getElementsByClassName(`usuarioConectado`);
         for (var i = 0; i < amigos.length; i++) {

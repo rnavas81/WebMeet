@@ -20,11 +20,23 @@ como para editar las existentes
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=Constantes .APP_NAME%></title>
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
+        <link rel="stylesheet" href="<%=Constantes.CSS_COLORES%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
+        <link rel="stylesheet" href="<%=Constantes.CSS_POPUP%>"/>
+        <script src="<%=Constantes.J_POPUP%>"></script>
         <script src="<%=Constantes.J_FORMULARIOPREFERENCIAS%>"></script>
     </head>
-    <%
+    <%  String msg_info = "";
+        if(session.getAttribute(Constantes.S_MSG_INFO)!=null){
+            msg_info = (String)session.getAttribute(Constantes.S_MSG_INFO);
+            session.removeAttribute(Constantes.S_MSG_INFO);
+        }
+        Usuario userData= new Usuario();
+        if(session.getAttribute(Constantes.S_USUARIO_FORMULARIO)!=null){
+            userData = (Usuario)session.getAttribute(Constantes.S_USUARIO_FORMULARIO);
+        }
+        out.print(userData.getNombre());
         LinkedList<Auxiliar> preferencias;
         if(session.getAttribute(Constantes.S_PREFERENCIAS)!=null){
             preferencias = (LinkedList<Auxiliar>) session.getAttribute(Constantes.S_PREFERENCIAS);
@@ -33,10 +45,8 @@ como para editar las existentes
             session.setAttribute(Constantes.S_PREFERENCIAS, preferencias);
         }
         %>
-    <body onload="validarFormulario()">
-        <header>  
-            <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt"/>
-        </header>
+    <body onload="validarFormulario(<%=msg_info.isBlank()?null:"'"+msg_info+"'"%>)">
+        <jsp:include page="../Componente/Cabecera.jsp"></jsp:include>
         <main class="formulario usuario">
             <div class="row">
                 <div class="col-m-12 col-12">
@@ -49,7 +59,8 @@ como para editar las existentes
                             <div class="col-m-4 col-4">
                                 </i>&nbsp<label class="required"><%=preferencia.getNombre()%></label>
                             </div>
-                            <input class="col-m-8 col-8" campo type="number" name="<%=preferencia.getId()%>" min="0" max="10" value="0"/>
+                            <input class="col-m-8 col-8" campo type="number" name="<%=preferencia.getId()%>" min="0" max="100" 
+                                   value="<%=userData.getPreferenciaById(preferencia.getId())!=null?userData.getPreferenciaById(preferencia.getId()).getValor():0%>"/>
                             <% }%>
                         </div>
                         <div class="row botones">
@@ -57,7 +68,7 @@ como para editar las existentes
                                 <input type="submit" name="<%=Constantes.A_AGREGAR_PREFERENCIAS%>" value="Guardar">
                             </div>
                             <div class="col-m-2 col-2">
-                                <input type="submit" name="<%=Constantes.A_SALIR%>" value="Salir">
+                                <input type="submit" name="<%=Constantes.A_ENTRAR_USUARIO%>" value="<%=Constantes.A_CANCELAR%>">
                             </div>
                         </div>
                     </form>

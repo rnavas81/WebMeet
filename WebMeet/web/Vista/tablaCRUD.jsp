@@ -17,8 +17,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=Constantes.APP_NAME%></title>
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
+        <link rel="stylesheet" href="<%=Constantes.CSS_COLORES%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
+        <link rel="stylesheet" href="<%=Constantes.CSS_POPUP%>"/>
+        <script src="<%=Constantes.J_POPUP%>"></script>
     </head>
     <%
         Usuario usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
@@ -47,17 +50,7 @@
         }
     %>
     <body>
-        <header>
-            <form class="row" action="<%=Constantes.C_ADMIN%>" method="POST">
-                <div class="col-3 col-m-3 left">
-                    <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt" onclick="window.location.href='<%=Constantes.V_INDEX%>'"/>
-                </div>
-                <div c class="col-9 col-m-9 right">
-                    <button type="submit" class="rounded" name="<%=Constantes.A_SALIR%>" ><i class="fas fa-sign-out-alt"></i></button>
-                    <button type="submit" class="rounded" name="<%=Constantes.A_EDITAR_MI_USUARIO%>" ><i class="fas fa-user"></i></button>
-                </div>
-            </form>
-        </header>
+        <jsp:include page="../Componente/Cabecera.jsp"></jsp:include>
         <main class="">
             <form class="row toolbar" action="<%=Constantes.C_ADMIN%>" method="POST">
                 <div class="col-6 col-m-6 left">

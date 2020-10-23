@@ -19,20 +19,28 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=Constantes.APP_NAME%></title>
         <link rel="shortcut icon" href="<%=Constantes.FAVICON%>" type="image/x-icon" />
+        <link rel="stylesheet" href="<%=Constantes.CSS_COLORES%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_GLOBAL%>"/>
         <link rel="stylesheet" href="<%=Constantes.CSS_FONTAWESOME%>"/>
+        <link rel="stylesheet" href="<%=Constantes.CSS_POPUP%>"/>
+        <script src="<%=Constantes.J_POPUP%>"></script>
         <script src="<%=Constantes.J_ENTRADAUSUARIO%>"></script>
     </head>
     <%
+        String msg_info = "";
+        if(session.getAttribute(Constantes.S_MSG_INFO)!=null){
+            msg_info = (String)session.getAttribute(Constantes.S_MSG_INFO);
+            session.removeAttribute(Constantes.S_MSG_INFO);
+        }
         if(session.getAttribute(Constantes.S_USUARIO)==null){
             session.invalidate();
             response.sendRedirect(Constantes.V_INDEX);
         }
         Usuario usuario = (Usuario) session.getAttribute(Constantes.S_USUARIO);
         LinkedList<Usuario> amigos = ConexionEstatica.obtenerAmigos(usuario);
-        LinkedList<Usuario> noamigos = ConexionEstatica.obtenerNoAmigos(usuario);
+        LinkedList<Usuario> otros = ConexionEstatica.obtenerNoAmigos(usuario);
         LinkedList<Usuario> pendientes = ConexionEstatica.obtenerAmigosPendientes(usuario);
-        //LinkedList<Usuario> noamigos = Funciones.calcularCompatibilidad(usuario,otros);
+        LinkedList<Usuario> noamigos = Funciones.calcularCompatibilidad(usuario,otros);
         LinkedList<Mensaje> mensajesRecibidos = ConexionEstatica.obtenerMensajesRecibidos(usuario);
         LinkedList<Mensaje> mensajesEnviados = ConexionEstatica.obtenerMensajesEnviados(usuario);
         LinkedList<Usuario> conectados=new LinkedList<>();
@@ -48,18 +56,8 @@
         }
         
     %>
-    <body>
-        <header>
-            <form class="row" action="<%=Constantes.C_BASICO%>" method="POST">
-                <div class="col-3 col-m-3 left">
-                    <img class="logo" src="<%=Constantes.I_LOGO%>" alt="alt" onclick="window.location.href='<%=Constantes.V_INDEX%>'"/>
-                </div>
-                <div c class="col-9 col-m-9 right">
-                    <button type="submit" class="rounded" name="<%=Constantes.A_SALIR%>" ><i class="fas fa-sign-out-alt"></i></button>
-                    <button type="submit" class="rounded" name="<%=Constantes.A_EDITAR_MI_USUARIO%>" ><i class="fas fa-user"></i></button>
-                </div>
-            </form>
-        </header>
+    <body onload="onloadEntradaUsuario(<%=msg_info.isBlank()?null:"'"+msg_info+"'"%>)">
+        <jsp:include page="../Componente/Cabecera.jsp"></jsp:include>
         <main class="cuadro">
             <form class="row toolbar" action="<%=Constantes.C_ADMIN%>" method="POST">
                 <div class="col-6 col-m-6 left">
@@ -74,7 +72,7 @@
             <div class="row">
                 <!-- MENSAJES -->
                 <div class="col-9 col-m-9 mensajes">
-                    <div class="row toolbar" action="<%=Constantes.C_ADMIN%>" method="POST">
+                    <div class="row toolbar">
                         <div class="left">
                         </div>
                         <div class="right">
@@ -151,7 +149,12 @@
                         <div class="fila1">
                             <div class="campo"><%=noamigo.getNombre()+" "+noamigo.getApellidos()%></div>
                             <% for (Preferencia preferencia : noamigo.getPreferencias()) {%>
-                            <div class="campo"><%=preferencia.getValor()%></div>
+                            <div class="campo <%
+                                if(preferencia.getValor()>-20 && preferencia.getValor()<20)out.print("bueno");
+                                else if(preferencia.getValor()>-40 && preferencia.getValor()<40)out.print("vale");
+                                else if(preferencia.getValor()>-60 && preferencia.getValor()<60)out.print("regular");
+                                else out.print("malo");
+                                %>"><%=preferencia.getValor()%></div>
                             <% }%>                           
                             <form action="<%=Constantes.C_BASICO%>" method="POST">
                                 <input type="hidden" name="id" value="<%=noamigo.getId()%>">

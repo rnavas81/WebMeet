@@ -6,7 +6,10 @@
 
 
 
-validarFormulario = () => {
+validarFormulario = (mensaje=null) => {    
+    if(mensaje!==null){
+        crearPopUp({text:mensaje});
+    }
     const form = document.getElementById('formulario');
     let elementos = {};
     const encontrados = document.querySelectorAll("[campo]");
@@ -42,7 +45,7 @@ validarFormulario = () => {
         for(name in elementos){
             if (!elementos[name].input.validity.valid) {
                 // Si no es así, mostramos un mensaje de error apropiado
-                elementos[name].error.textContent="El valor debe estar entre 0 y 10";
+                elementos[name].error.textContent="El valor debe estar entre 0 y 100";
                 event.preventDefault();
             } else {
                 elementos[name].error.innerHTML = ''; // Restablece el contenido del mensaje

@@ -154,11 +154,30 @@ public class Usuario {
             this.preferencias.add(preferencia);
         }
     }
+    public void updatePreferencia(Preferencia preferencia){
+        boolean existe=false;
+        for (int i = 0;!existe && i < preferencias.size(); i++) {
+            Preferencia get = preferencias.get(i);
+            if(get.getId()==preferencia.getId()){
+                existe=true;
+                get.setValor(preferencia.getValor());
+            }
+        }
+        if(!existe){
+            this.preferencias.add(preferencia);
+        }
+    }
     public Preferencia getPreferenciaById(int id){
         for (Preferencia preferencia : this.preferencias) {
             if(preferencia.getId()==id)return preferencia;
         }
         return null;
+    }
+    public int getPreferenciaValorById(int id){
+        for (Preferencia preferencia : this.preferencias) {
+            if(preferencia.getId()==id)return preferencia.getValor();
+        }
+        return 0;
     }
     public Preferencia getPreferenciaByIndex(int index){
         if(index<this.preferencias.size()){
